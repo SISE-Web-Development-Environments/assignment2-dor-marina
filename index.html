@@ -1,21 +1,87 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<link rel="stylesheet" type="text/css" href="style.css" />
 		<script src="./jquery-3.4.1.slim.min.js"></script>
 		<script type="text/javascript" src="./app.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script>var usersAndPass=["p+p"]</script>
+		<script>
+			$(document).ready(function(){
+				$('div:not(#welcome)').hide();
+				$('#welcome').show();
+			});
+		</script>
 	</head>
-
 	<body>
-		<div id="score">
-			<label for="lblScore">SCORE:</label>
-			<input id="lblScore" type="text" />
-		</div>
-		<div id="time">
-			<label for="lblTime">TIME:</label>
-			<input id="lblTime" type="text" />
-		</div>
-		<div id="game">
-			<canvas id="canvas" height="600" width="600"></canvas>
-		</div>
+		<content>
+			<div id="welcome" class="notGame">
+					<p>
+						<img src="logo2.png"  class="image">
+						GAME ON!
+						<br/>
+						<button class="button" type="button">Sign Up</button>
+						<button class="button" id="loginButton" type="button" onclick="switchToLogin()">Log In</button>
+					</p>
+			</div>
+			<div id="login" class="notGame">
+				<p class="container">
+					<br/>
+					<br/>
+					<br/>
+					<br/>
+					<br/>
+					<label for="uname">Username</label>
+					<input type="text" placeholder="Enter Username" name="uname" required>
+					<br/>
+					<br/>
+					<label for="psw"><b>Password</b></label>
+					<input type="password" placeholder="Enter Password" name="psw" required>
+					<br/>
+					<br/>
+					<br/>
+					<button class="button" type="submit" onclick="checkLogin()">Login</button>
+				</p>
+			</div>
+			<div id="menu">
+				<li><a href="#welcome">Welcome</a></li>
+				<li><a href="#register">Register</a></li>
+				<li><a href="#login">Log in</a></li>
+				<li><a href="#about">About</a></li>
+				</div>
+			<div id="score">
+				<label for="lblScore">SCORE:</label>
+				<input id="lblScore" type="text" />
+			</div>
+			<div id="time">
+				<label for="lblTime">TIME:</label>
+				<input id="lblTime" type="text" />
+			</div>
+			<div id="game">
+				<canvas id="canvas" height="600" width="600"></canvas>
+			</div>
+		</content>
 	</body>
+
+	<script type="text/javascript">
+		function switchToLogin(){
+			$('#welcome').hide();
+			$('#login').show();
+		};
+	</script>
+	<script type="text/javascript">
+		function checkLogin(){
+			var inputUserName = document.getElementById("uname");
+			var inputPassword = document.getElementById("psw");
+			var userPass = inputUserName+"+"+inputPassword;
+			var check = usersAndPass.includes(userPass);
+			if(check){
+				$('#login').hide();
+				$('#game').show();
+			}
+			else{
+			}
+		};
+	</script>
+</script>
 </html>
