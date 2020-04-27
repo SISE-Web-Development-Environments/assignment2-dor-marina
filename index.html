@@ -8,7 +8,14 @@
 		<script src="./formValidation.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
-		<script>var usersAndPass=["p+p"]</script>
+		<script>
+			// Check browser support
+			if (typeof(Storage) !== "undefined") {
+			  sessionStorage.setItem("p", "p");
+			} else {
+			  console.log( "Sorry, your browser does not support Web Storage...");
+			}
+			</script>
 		<script>
 			$(document).ready(function(){
 				$('div:not(#welcome)').hide();
@@ -47,7 +54,7 @@
 				</p>
 			</div>
 			<div id="register" class="notGame">
-				<form action="" name="registration">
+				<form name="registration">
 				<br/>
 				Sign Up
 				<img src="ghost2.gif"  class="image2">
@@ -109,9 +116,9 @@
 		function checkLogin(){
 			var inputUserName = document.getElementById("uname").value;
 			var inputPassword = document.getElementById("psw").value;
-			var userPass = inputUserName+"+"+inputPassword;
-			var check = usersAndPass.includes(userPass);
-			if(check){
+			var check = sessionStorage.getItem(inputUserName);
+			console.log(check);
+			if(inputPassword === check){
 				$('#login').hide();
 				$('#game').show();
 				$('#menu').show();
@@ -196,18 +203,15 @@
 			console.log(inputUserName);
 			var inputPassword = document.getElementById("password").value;
 			console.log(inputPassword);
-			var userPass = inputUserName+"+"+inputPassword;
-			console.log(userPass);
-			var check = usersAndPass.includes(userPass);
-			console.log(check)
-			if(check){
-				window.alert("You already signed up! Go back and log in to the game");
+			var check = sessionStorage.getItem(inputUserName);
+			if(check !== null){
+				window.alert("you already signed up!\n Go back and log in with your username and password");
 			}
 			else{
-				usersAndPass.append(userPass);
-				//$('div').hide();
-				//$('#game').show();
+				sessionStorage.setItem(inputUserName,inputPassword);
+				window.alert("You signed in correctly!");
 			}
+			event.preventDefault();
 		};
 	</script>
 </html>
