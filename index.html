@@ -2,9 +2,12 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="style.css" />
+		<link rel="stylesheet" href="formStyle.css"/>
 		<script src="./jquery-3.4.1.slim.min.js"></script>
 		<script type="text/javascript" src="./app.js"></script>
+		<script src="./formValidation.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 		<script>var usersAndPass=["p+p"]</script>
 		<script>
 			$(document).ready(function(){
@@ -17,10 +20,10 @@
 		<content>
 			<div id="welcome" class="notGame">
 					<p>
-						<img src="logo2.png"  class="image">
+						<img src="logo2.png"  class="image1">
 						GAME ON!
 						<br/>
-						<button class="button" type="button">Sign Up</button>
+						<button class="button" type="button" onclick="switchToSignIn()">Sign Up</button>
 						<button class="button" id="loginButton" type="button" onclick="switchToLogin()">Log In</button>
 					</p>
 			</div>
@@ -32,16 +35,41 @@
 					<br/>
 					<br/>
 					<label for="uname">Username</label>
-					<input type="text" placeholder="Enter Username" name="uname" required>
+					<input id ="uname" type="text" placeholder="Enter Username" name="uname" required>
 					<br/>
 					<br/>
 					<label for="psw"><b>Password</b></label>
-					<input type="password" placeholder="Enter Password" name="psw" required>
-					<br/>
+					<input id ="psw" type="password" placeholder="Enter Password" name="psw" required>
 					<br/>
 					<br/>
 					<button class="button" type="submit" onclick="checkLogin()">Login</button>
+					<button class="button" onclick="backToWelcome()">Back</button>
 				</p>
+			</div>
+			<div id="register" class="notGame">
+				<form action="" name="registration">
+				<br/>
+				Sign Up
+				<img src="ghost2.gif"  class="image2">
+				<br/>
+				<br/>
+				<input type="text" name="firstname" placeholder="First Name" />
+				<input type="text" name="lastname" placeholder="Last Name" />
+				<input id="username" type="text" name="username" placeholder="Username" />
+				<br/>
+				<input id="password" type="password" name="password" placeholder="Password" />
+				<input type="text" name="email" placeholder="E-mail" />
+				<p style="font-size: small;">choose your B-day:</p>
+				<select id="year"></select>
+				<select id="month"></select>
+				<select id="day"></select>
+				<br/>
+				<br/>
+				<button class="button" type="submit" onclick="signUp()">Sign Me Up!</button>
+				<button class="button" onclick="backToWelcome()">Back</button>
+				</form>
+				</div>
+			<div id="properties">
 			</div>
 			<div id="menu">
 				<li><a href="#welcome">Welcome</a></li>
@@ -69,19 +97,117 @@
 			$('#login').show();
 		};
 	</script>
+
+	<script type="text/javascript">
+		function switchToSignIn(){
+			$('#welcome').hide();
+			$('#register').show();
+		};
+	</script>
+
 	<script type="text/javascript">
 		function checkLogin(){
-			var inputUserName = document.getElementById("uname");
-			var inputPassword = document.getElementById("psw");
+			var inputUserName = document.getElementById("uname").value;
+			var inputPassword = document.getElementById("psw").value;
 			var userPass = inputUserName+"+"+inputPassword;
 			var check = usersAndPass.includes(userPass);
 			if(check){
 				$('#login').hide();
 				$('#game').show();
+				$('#menu').show();
+				$('#time').show();
+				$('#score').show();
 			}
 			else{
+				window.alert("Your Username or Password is invalid. (Maybe you didn't sign in?)");
 			}
 		};
 	</script>
-</script>
+
+	<script type="text/javascript">
+		function backToWelcome(){
+				$('div:not(#welcome)').hide();
+				$('#welcome').show();
+			};
+	</script>
+	<script>
+	$(document).ready(function() {
+		const monthNames = ["January", "February", "March", "April", "May", "June",
+		"July", "August", "September", "October", "November", "December"
+		];
+		var qntYears = 31;
+		var selectYear = $("#year");
+		var selectMonth = $("#month");
+		var selectDay = $("#day");
+		var currentYear = new Date().getFullYear();
+		
+		for (var y = 0; y < qntYears; y++){
+			let date = new Date(currentYear);
+			var yearElem = document.createElement("option");
+			yearElem.value = currentYear 
+			yearElem.textContent = currentYear;
+			selectYear.append(yearElem);
+			currentYear--;
+		} 
+
+		for (var m = 0; m < 12; m++){
+			let monthNum = new Date(2018, m).getMonth()
+			let month = monthNames[monthNum];
+			var monthElem = document.createElement("option");
+			monthElem.value = monthNum; 
+			monthElem.textContent = month;
+			selectMonth.append(monthElem);
+			}
+
+			var d = new Date();
+			var month = d.getMonth();
+			var year = d.getFullYear();
+			var day = d.getDate();
+
+			selectYear.val(year); 
+			selectYear.on("change", AdjustDays);  
+			selectMonth.val(month);    
+			selectMonth.on("change", AdjustDays);
+
+			AdjustDays();
+			selectDay.val(day)
+			
+			function AdjustDays(){
+			var year = selectYear.val();
+			var month = parseInt(selectMonth.val()) + 1;
+			selectDay.empty();
+			
+			//get the last day, so the number of days in that month
+			var days = new Date(year, month, 0).getDate(); 
+			
+			//lets create the days of that month
+			for (var d = 1; d <= days; d++){
+				var dayElem = document.createElement("option");
+				dayElem.value = d; 
+				dayElem.textContent = d;
+				selectDay.append(dayElem);
+			}
+			}    
+});
+	</script>
+	<script type="text/javascript">
+		function signUp(){
+			var inputUserName = document.getElementById("username").value;
+			console.log(inputUserName);
+			var inputPassword = document.getElementById("password").value;
+			console.log(inputPassword);
+			var userPass = inputUserName+"+"+inputPassword;
+			console.log(userPass);
+			var check = usersAndPass.includes(userPass);
+			console.log(check)
+			if(check){
+				window.alert("You already signed up! Go back and log in to the game");
+			}
+			else{
+				usersAndPass.append(userPass);
+				//$('div').hide();
+				//$('#game').show();
+			}
+		};
+	</script>
 </html>

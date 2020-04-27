@@ -40,12 +40,22 @@ body{
     font-size: 30px;
 }
 
-.image{
+#register{
+    font-family: 'Press Start 2p';
+    font-size: 30px;
+}
+
+.image1{
     width: 70px;
     height: auto;
     position: absolute;
     top: 0px;
     right: 10px;
+}
+.image2{
+    width: 40px;
+    height: auto;
+    position: absolute;
 }
 
 .button{
@@ -73,25 +83,23 @@ body{
 	top: .2em;
 }
 
-input[type=text], input[type=password] {
-    width: 20%;
+input[type=text], input[type=password]{
+    width: 15%;
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
     border: 3px solid #555;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font: large Verdana,sans-serif;
+    letter-spacing: 1px;
     background-color: ivory;
   }
-  #message {
-    display:none;
-    background: #f1f1f1;
-    color: #000;
-    position: relative;
-    padding: 20px;
-    margin-top: 10px;
-  }
-  
-  #message p {
-    padding: 10px 35px;
-    font-size: 18px;
+  select{
+    width: 10%;
+    padding: 3px 15px;
+    margin: 5px 0;
+    box-sizing: border-box;
+    border: 3px solid #555;
+    font: large Verdana,sans-serif;
+    letter-spacing: 1px;
+    background-color: ivory; 
   }
