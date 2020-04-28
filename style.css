@@ -14,7 +14,6 @@ body{
     src: url(PressStart2P-Regular.ttf);
     font-family: 'Press Start 2p';
   }
-
 .notGame {
     background: url('packmanBackgroundHD.jpg') no-repeat center center fixed;
     position:absolute;
@@ -103,3 +102,5 @@ input[type=text], input[type=password]{
     letter-spacing: 1px;
     background-color: ivory; 
   }
+
+  

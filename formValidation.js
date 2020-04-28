@@ -1,5 +1,5 @@
 // Wait for the DOM to be ready
-$(function() {
+    $(function() {
     // Initialize form validation on the registration form.
     // It has the name attribute "registration"
     $("form[name='registration']").validate({
@@ -46,8 +46,10 @@ $(function() {
           pwcheck: "Your Password must include at least one letter and one digit"
         },
         email: "Please enter a valid email address"
+      },
+      submitHandler: function(form) {
+        form.submit();
       }
-      
     });
     $.validator.addMethod("pwcheck", function(value) {
         return /^[A-Za-z0-9\d=!\-@._*]*$/.test(value) // consists of only these
