@@ -46,9 +46,6 @@
           pwcheck: "Your Password must include at least one letter and one digit"
         },
         email: "Please enter a valid email address"
-      },
-      submitHandler: function(form) {
-        form.submit();
       }
     });
     $.validator.addMethod("pwcheck", function(value) {

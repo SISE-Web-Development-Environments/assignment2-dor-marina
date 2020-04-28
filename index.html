@@ -22,7 +22,6 @@
 			$(document).ready(function(){
 				$('div:not(#welcome)').hide();
 				$('#welcome').show();
-				$('#submitButton').hide();
 			});
 		</script>
 	</head>
@@ -62,26 +61,25 @@
 			</div>
 			<div id="register" class="notGame">
 				<form action="" name="registration" id="form">
-				<br/>
-				Sign Up
-				<img src="ghost2.gif"  class="image2">
-				<br/>
-				<br/>
-				<input type="text" name="firstname" placeholder="First Name" />
-				<input type="text" name="lastname" placeholder="Last Name" />
-				<input id="username" type="text" name="username" placeholder="Username" />
-				<br/>
-				<input id="password" type="password" name="password" placeholder="Password" />
-				<input type="text" name="email" placeholder="E-mail" />
-				<p style="font-size: small;">choose your B-day:</p>
-				<select id="year"></select>
-				<select id="month"></select>
-				<select id="day"></select>
-				<br/>
-				<br/>
-				<button class="button" id= "checkButton" type="submit" onclick="switchButton()">Check your details</button>
-				<button class="button" id="submitButton" type="submit" onclick="signUp()">Sign Me Up!</button>
-				<button class="button" onclick="backToWelcome()">Back</button>
+					<br/>
+					Sign Up
+					<img src="ghost2.gif"  class="image2">
+					<br/>
+					<br/>
+					<input id="first" type="text" name="firstname" placeholder="First Name" />
+					<input id="last" type="text" name="lastname" placeholder="Last Name" />
+					<input id="username" type="text" name="username" placeholder="Username" />
+					<br/>
+					<input id="password" type="password" name="password" placeholder="Password" />
+					<input id="email" type="text" name="email" placeholder="E-mail" />
+					<p style="font-size: small;">choose your B-day:</p>
+					<select id="year"></select>
+					<select id="month"></select>
+					<select id="day"></select>
+					<br/>
+					<br/>
+					<button class="button" id="submitButton" type="submit" onclick="signUp()">Sign Me Up!</button>
+					<button class="button" onclick="backToWelcome()">Back</button>
 				</form>
 			</div>
 			<div id="properties">
@@ -146,20 +144,7 @@
 				$('#myModal').show();
 			};
 	</script>
-	<script type="text/javascript">
-		function switchButton(){
-			var validator = $("form").validate();
-			validator.showErrors();
-			console.log(validator.errorList[0]);
-			console.log($(validator).errorList);
-			if (validator.errorList.length === 0) {
-				$('#checkButton').hide();
-				$('#submitButton').show();
-			} else{
-				window.alert("check your form");
-			}
-			};
-	</script>
+
 	<script>
 	$(document).ready(function() {
 		const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -222,13 +207,10 @@
 	</script>
 
 	<script type="text/javascript">
-
 		function signUp(){
-				console.log("entered");
+			if ($("#username").valid() == true && $("#password").valid()== true && $("#first").valid() == true && $("#last").valid() == true && $("#email").valid() == true) {
 				var inputUserName = document.getElementById("username").value;
-				console.log(inputUserName);
 				var inputPassword = document.getElementById("password").value;
-				console.log(inputPassword);
 				var check = sessionStorage.getItem(inputUserName);
 				if(check !== null){
 					window.alert("you already signed up!\n Go back and log in with your username and password");
@@ -238,6 +220,10 @@
 					window.alert("You signed in correctly!");
 				}
 				event.preventDefault();
+			}
+			else{
+				window.alert("check your form");
+			}
 		};
 	</script>
 	<script>
