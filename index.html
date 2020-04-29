@@ -25,7 +25,6 @@
 				$('div:not(#welcome)').hide();
 				$("#allStuffForGame").hide();
 				$('#welcome').show();
-				myMusic.play();
 			});
 		</script>
 	</head>
@@ -37,7 +36,7 @@
 			  </div>
 			<div id="welcome" class="notGame">
 					<p>
-						<img src="logo2.png"  class="image1">
+						<img src="pictures\\logo2.png"  class="image1">
 						GAME ON!
 						<br/>
 						<button class="button" type="button" onclick="switchToSignIn()">Sign Up</button>
@@ -48,6 +47,7 @@
 				<p class="container">
 					<br/>
 					<br/>
+					Login
 					<br/>
 					<br/>
 					<br/>
@@ -67,7 +67,7 @@
 				<form action="" name="registration" id="form">
 					<br/>
 					Sign Up
-					<img src="ghost2.gif"  class="image2">
+					<img src="pictures\\ghost2.gif"  class="image2">
 					<br/>
 					<br/>
 					<input id="first" type="text" name="firstname" placeholder="First Name" />
@@ -90,22 +90,23 @@
 			</div>
 			<section id="allStuffForGame">
 				<nav id="menu">
-					<li><a href="#welcome">Welcome</a></li>
-					<li><a href="#register">Register</a></li>
-					<li><a href="#login">Log in</a></li>
+					<li><a href="#welcome" onclick="backToWelcome()">Welcome</a></li>
+					<li><a href="#register" onclick="switchToLogin()">Register</a></li>
+					<li><a href="#login" onclick="switchToSignIn()">Log in</a></li>
 					<li><a href="#myModal" rel="modal:open">About</a></li>
 				</nav>
-				<div id="name"  class="info">
-					<label id="lblName">Player:</label>
-				</div>
+				<!-- <div id="name"  class="info">
+				</div> -->
 				<div id="score" class="info">
+					<label id="lblName"></label>
 					<label for="lblScore">SCORE:</label>
 					<input id="lblScore" type="text" />
-				</div>
-				<div id="time"  class="info">
 					<label for="lblTime">TIME:</label>
 					<input id="lblTime" type="text"/>
 				</div>
+				<!-- <div id="time"  class="info">
+					
+				</div> -->
 				<div id="game" class="game">
 					<canvas id="canvas" height="600" width="600"></canvas>
 					<br/>
@@ -117,15 +118,21 @@
 
 	<script type="text/javascript">
 		function switchToLogin(){
-			$('#welcome').hide();
+			$('div:not(#login)').hide();
+			$("#allStuffForGame").hide();
 			$('#login').show();
+			backMusic.pause();
+			myMusic.play();
 		};
 	</script>
 
 	<script type="text/javascript">
 		function switchToSignIn(){
-			$('#welcome').hide();
+			$('div:not(#register)').hide();
+			$("#allStuffForGame").hide();
 			$('#register').show();
+			backMusic.pause();
+			myMusic.play();
 		};
 	</script>
 
@@ -141,7 +148,7 @@
 				$('#time').show();
 				$('#score').show();
 				$('#name').show();
-				$('#name label').append(inputUserName);
+				$('#lblName').append("Player: "+ inputUserName);
 				$('#allStuffForGame').show();
 				backMusic.play();
 				start_time = new Date();
@@ -156,7 +163,7 @@
 		function backToWelcome(){
 				$('div:not(#welcome)').hide();
 				$('#welcome').show();
-				$('#myModal').show();
+				backMusic.pause();
 			};
 	</script>
 
@@ -242,7 +249,6 @@
 		};
 	</script>
 	<script>
-			console.log("inTheFunction");
 		var modal = document.getElementById("myModal");
 		var btn = document.getElementById("about");
 		var span = document.getElementsByClassName("close")[0];
@@ -250,9 +256,6 @@
 		e.preventDefault();
 		modal.style.display = "block";
 		});
-		// span.onclick = function() {
-		//   modal.style.display = "none";
-		// }
 		window.onclick = function(event) {
 		  if (event.target == modal) {
 			modal.style.display = "none";

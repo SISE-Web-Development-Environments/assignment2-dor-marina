@@ -9,16 +9,21 @@ var interval;
 var myMusic;
 var musicEat;
 var backMusic;
+var firstMouth;
+var secMouth;
+var firstBall;
+var secBall;
 
 $(document).ready(function() {
 	context = canvas.getContext("2d");
 	Start();
+	firstMouth = 0.15; secMouth = 1.85, firstBall = 5, secBall = -15;
 });
 
 function Start() {
-	myMusic = new Audio("pacman_beginning.wav");
-	musicEat = new Audio("pacman_chomp.wav");
-	backMusic = new Audio("Pac-Man Fever (Eat Em Up) 2015.mp3");
+	myMusic = new Audio("music\\pacman_beginning.wav");
+	musicEat = new Audio("music\\pacman_chomp.wav");
+	backMusic = new Audio("music\\Pac-Man Fever (Eat Em Up) 2015.mp3");
 	musicEat.volume = 0.5;
 	backMusic.volume = 0.5;
 	backMusic.loop = true;
@@ -128,15 +133,7 @@ function Draw() {
 			center.x = i * 60 + 30;
 			center.y = j * 60 + 30;
 			if (board[i][j] == 2) {
-				context.beginPath();
-				context.arc(center.x, center.y, 30, 0.15 * Math.PI, 1.85 * Math.PI); // half circle
-				context.lineTo(center.x, center.y);
-				context.fillStyle = pac_color; //color
-				context.fill();
-				context.beginPath();
-				context.arc(center.x + 5, center.y - 15, 5, 0, 2 * Math.PI); // circle
-				context.fillStyle = "blue" //color
-				context.fill();
+				rotatePacman();
 			} else if (board[i][j] == 1) {
 				context.beginPath();
 				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
@@ -152,6 +149,76 @@ function Draw() {
 				context.lineWidth = 4;
 				context.strokeStyle = "#009BFF";
 				context.stroke();
+				context.fill();
+			}
+		}
+	}
+}
+
+function rotatePacman(){
+	var x = GetKeyPressed();
+	for (var i = 0; i < 10; i++) {
+		for (var j = 0; j < 10; j++) {
+			var center = new Object();
+			center.x = i * 60 + 30;
+			center.y = j * 60 + 30;
+			if (board[i][j] == 2  && x==1 ) { //up
+				context.beginPath();
+				context.arc(center.x, center.y, 30, -0.35* Math.PI,1.35* Math.PI); // half circle
+				context.lineTo(center.x, center.y);
+				context.fillStyle = pac_color; //color
+				context.fill();
+				context.beginPath();
+				context.arc(center.x +15, center.y - 5, 5, 0, 2 * Math.PI); // circle
+				context.fillStyle = "blue" //color
+				context.fill();
+				firstMouth = -0.35, secMouth = 1.35, firstBall = 15; secBall = -5;
+			}
+			else if(board[i][j] == 2 && x==2){ //down
+				context.beginPath();
+				context.arc(center.x, center.y, 30, -1.35* Math.PI, 0.35* Math.PI); // half circle
+				context.lineTo(center.x, center.y);
+				context.fillStyle = pac_color; //color
+				context.fill();
+				context.beginPath();
+				context.arc(center.x -15, center.y + 5, 5, 0, 2 * Math.PI); // circle
+				context.fillStyle = "blue" //color
+				context.fill();
+				firstMouth = -1.35, secMouth = 0.35, firstBall = -15; secBall = 5;
+			}
+			else if(board[i][j] == 2 && x==3){ //left
+				context.beginPath();
+				context.arc(center.x, center.y, 30, -0.85* Math.PI, 0.85* Math.PI); // half circle
+				context.lineTo(center.x, center.y);
+				context.fillStyle = pac_color; //color
+				context.fill();
+				context.beginPath();
+				context.arc(center.x -5, center.y - 15, 5, 0, 2 * Math.PI); // circle
+				context.fillStyle = "blue" //color
+				context.fill();
+				firstMouth = -0.85, secMouth = 0.85, firstBall = -5; secBall = -15;
+			}
+			else if(board[i][j] == 2&& x==4) { // right
+				context.beginPath();
+				context.arc(center.x, center.y, 30, 0.15* Math.PI, 1.85* Math.PI); // half circle
+				context.lineTo(center.x, center.y);
+				context.fillStyle = pac_color; //color
+				context.fill();
+				context.beginPath();
+				context.arc(center.x +5, center.y - 15, 5, 0, 2 * Math.PI); // circle
+				context.fillStyle = "blue" //color
+				context.fill();
+				firstMouth = 0.15, secMouth = 1.85, firstBall = 5; secBall = -15;
+			}
+			else if(board[i][j] == 2) { // non of the above
+				context.beginPath();
+				context.arc(center.x, center.y, 30, firstMouth* Math.PI, secMouth* Math.PI); // half circle
+				context.lineTo(center.x, center.y);
+				context.fillStyle = pac_color; //color
+				context.fill();
+				context.beginPath();
+				context.arc(center.x + firstBall , center.y + secBall, 5, 0, 2 * Math.PI); // circle
+				context.fillStyle = "blue" //color
 				context.fill();
 			}
 		}
@@ -198,5 +265,6 @@ function UpdatePosition() {
 		backMusic.currentTime = 0;
 	} else {
 		Draw();
+		rotatePacman();
 	}
 }
