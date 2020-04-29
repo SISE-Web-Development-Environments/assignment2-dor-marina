@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<link rel="shortcut icon" href="#" />
 		<link rel="stylesheet" type="text/css" href="style.css" />
 		<link rel="stylesheet" href="formStyle.css"/>
+		<link rel="stylesheet" href="gameStyle.css"/>
 		<script src="./jquery-3.4.1.slim.min.js"></script>
 		<script type="text/javascript" src="./app.js"></script>
 		<script src="./formValidation.js"></script>
@@ -21,7 +23,9 @@
 		<script>
 			$(document).ready(function(){
 				$('div:not(#welcome)').hide();
+				$("#allStuffForGame").hide();
 				$('#welcome').show();
+				myMusic.play();
 			});
 		</script>
 	</head>
@@ -84,23 +88,30 @@
 			</div>
 			<div id="properties">
 			</div>
-			<nav id="menu">
-				<li><a href="#welcome">Welcome</a></li>
-				<li><a href="#register">Register</a></li>
-				<li><a href="#login">Log in</a></li>
-				<li><a href="#myModal" rel="modal:open">About</a></li>
-			</nav>
-			<div id="score">
-				<label for="lblScore">SCORE:</label>
-				<input id="lblScore" type="text" />
-			</div>
-			<div id="time">
-				<label for="lblTime">TIME:</label>
-				<input id="lblTime" type="text" />
-			</div>
-			<div id="game">
-				<canvas id="canvas" height="600" width="600"></canvas>
-			</div>
+			<section id="allStuffForGame">
+				<nav id="menu">
+					<li><a href="#welcome">Welcome</a></li>
+					<li><a href="#register">Register</a></li>
+					<li><a href="#login">Log in</a></li>
+					<li><a href="#myModal" rel="modal:open">About</a></li>
+				</nav>
+				<div id="name"  class="info">
+					<label id="lblName">Player:</label>
+				</div>
+				<div id="score" class="info">
+					<label for="lblScore">SCORE:</label>
+					<input id="lblScore" type="text" />
+				</div>
+				<div id="time"  class="info">
+					<label for="lblTime">TIME:</label>
+					<input id="lblTime" type="text"/>
+				</div>
+				<div id="game" class="game">
+					<canvas id="canvas" height="600" width="600"></canvas>
+					<br/>
+					<br/>
+				</div>
+			</section>
 		</content>
 	</body>
 
@@ -123,13 +134,17 @@
 			var inputUserName = document.getElementById("uname").value;
 			var inputPassword = document.getElementById("psw").value;
 			var check = sessionStorage.getItem(inputUserName);
-			console.log(check);
 			if(inputPassword === check){
 				$('#login').hide();
 				$('#game').show();
 				$('#menu').show();
 				$('#time').show();
 				$('#score').show();
+				$('#name').show();
+				$('#name label').append(inputUserName);
+				$('#allStuffForGame').show();
+				backMusic.play();
+				start_time = new Date();
 			}
 			else{
 				window.alert("Your Username or Password is invalid. (Maybe you didn't sign in?)");

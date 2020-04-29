@@ -1,0 +1,39 @@
+#allStuffForGame{
+    background: url('fon2.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    font-family: "joystick";
+    color: rgb(214, 212, 212);
+  }
+
+  #canvas{
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    height: 490px;
+    background-color: rgba(0, 0, 0, 0.411);
+    border:rgba(255, 255, 0, 0.521) 2px solid;
+  }
+  
+#score{
+    display: inline-block;
+    vertical-align: top;
+    float: right;
+    padding-left: 70px;
+ }
+
+
+  #name{
+    font-family: 'Press Start 2p';
+      font-size: 15px;
+      /* position: absolute; */
+      text-align: left;
+      padding-top: 10px;
+      /* top:60px;
+      left:15px; */
+  }
+

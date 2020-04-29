@@ -6,6 +6,9 @@ var pac_color;
 var start_time;
 var time_elapsed;
 var interval;
+var myMusic;
+var musicEat;
+var backMusic;
 
 $(document).ready(function() {
 	context = canvas.getContext("2d");
@@ -13,13 +16,18 @@ $(document).ready(function() {
 });
 
 function Start() {
+	myMusic = new Audio("pacman_beginning.wav");
+	musicEat = new Audio("pacman_chomp.wav");
+	backMusic = new Audio("Pac-Man Fever (Eat Em Up) 2015.mp3");
+	musicEat.volume = 0.5;
+	backMusic.volume = 0.5;
+	backMusic.loop = true;
 	board = new Array();
 	score = 0;
 	pac_color = "yellow";
 	var cnt = 100;
 	var food_remain = 50;
 	var pacman_remain = 1;
-	start_time = new Date();
 	for (var i = 0; i < 10; i++) {
 		board[i] = new Array();
 		//put obstacles in (i=3,j=3) and (i=3,j=4) and (i=3,j=5), (i=6,j=1) and (i=6,j=2)
@@ -28,8 +36,21 @@ function Start() {
 				(i == 3 && j == 3) ||
 				(i == 3 && j == 4) ||
 				(i == 3 && j == 5) ||
+				(i == 2 && j == 5) ||
+				(i == 4 && j == 5) ||
 				(i == 6 && j == 1) ||
-				(i == 6 && j == 2)
+				(i == 6 && j == 2) ||
+				(i == 2 && j == 1) ||
+				(i == 3 && j == 1) ||
+				(i == 8 && j == 8) ||
+				(i == 8 && j == 7) ||
+				(i == 7 && j == 8) ||
+				(i == 8 && j == 3) ||
+				(i == 9 && j == 3) ||
+				(i == 2 && j == 7) ||
+				(i == 2 && j == 8) ||
+				(i == 1 && j == 7) ||
+				(i == 3 && j == 7)
 			) {
 				board[i][j] = 4;
 			} else {
@@ -114,17 +135,23 @@ function Draw() {
 				context.fill();
 				context.beginPath();
 				context.arc(center.x + 5, center.y - 15, 5, 0, 2 * Math.PI); // circle
-				context.fillStyle = "black"; //color
+				context.fillStyle = "blue" //color
 				context.fill();
 			} else if (board[i][j] == 1) {
 				context.beginPath();
 				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
-				context.fillStyle = "black"; //color
+				context.fillStyle = "blue"; //color
 				context.fill();
 			} else if (board[i][j] == 4) {
+				var my_gradient = context.createLinearGradient(0, 0, 0, 170);
+				my_gradient.addColorStop(0, "#696969");
+				my_gradient.addColorStop(1, "#9F9F9F");
 				context.beginPath();
 				context.rect(center.x - 30, center.y - 30, 60, 60);
-				context.fillStyle = "grey"; //color
+				context.fillStyle = my_gradient; //color
+				context.lineWidth = 4;
+				context.strokeStyle = "#009BFF";
+				context.stroke();
 				context.fill();
 			}
 		}
@@ -156,6 +183,7 @@ function UpdatePosition() {
 	}
 	if (board[shape.i][shape.j] == 1) {
 		score++;
+		musicEat.play();
 	}
 	board[shape.i][shape.j] = 2;
 	var currentTime = new Date();
@@ -166,6 +194,8 @@ function UpdatePosition() {
 	if (score == 50) {
 		window.clearInterval(interval);
 		window.alert("Game completed");
+		backMusic.pause();
+		backMusic.currentTime = 0;
 	} else {
 		Draw();
 	}
