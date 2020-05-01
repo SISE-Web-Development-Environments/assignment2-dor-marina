@@ -106,6 +106,9 @@ function Start() {
 		},
 		false
 	);
+	// if(interval!=null){
+	// clearInterval(interval);
+	// }
 	interval = setInterval(UpdatePosition, 250);
 }
 
