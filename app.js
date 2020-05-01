@@ -8,11 +8,15 @@ var time_elapsed;
 var interval;
 var myMusic;
 var musicEat;
+var musicExtra;
 var backMusic;
 var firstMouth;
 var secMouth;
 var firstBall;
 var secBall;
+var lifesRemain;
+var pill;
+var pillTime;
 
 $(document).ready(function() {
 	context = canvas.getContext("2d");
@@ -21,14 +25,18 @@ $(document).ready(function() {
 });
 
 function Start() {
+	pill = document.getElementById("pill");
 	myMusic = new Audio("music\\pacman_beginning.wav");
 	musicEat = new Audio("music\\pacman_chomp.wav");
 	backMusic = new Audio("music\\Pac-Man Fever (Eat Em Up) 2015.mp3");
+	musicExtra = new Audio("music/Extra.mp3");
 	musicEat.volume = 0.5;
-	backMusic.volume = 0.5;
+	backMusic.volume = 0.1;
 	backMusic.loop = true;
+	pillTime = null;
 	board = new Array();
 	score = 0;
+	lifesRemain = 5;
 	pac_color = "yellow";
 	var cnt = 100;
 	var food_remain = 50;
@@ -58,7 +66,10 @@ function Start() {
 				(i == 3 && j == 7)
 			) {
 				board[i][j] = 4;
-			} else {
+			}  else if(i==0 && j==9 || i==0 && j==0 || i==9 && j==0 || i==9 && j==9){
+				board[i][j]= 5;
+			}
+			 else {
 				var randomNum = Math.random();
 				if (randomNum <= (1.0 * food_remain) / cnt) {
 					food_remain--;
@@ -127,6 +138,7 @@ function Draw() {
 	canvas.width = canvas.width; //clean board
 	lblScore.value = score;
 	lblTime.value = time_elapsed;
+	lblLifes.value = lifesRemain;
 	for (var i = 0; i < 10; i++) {
 		for (var j = 0; j < 10; j++) {
 			var center = new Object();
@@ -150,6 +162,8 @@ function Draw() {
 				context.strokeStyle = "#009BFF";
 				context.stroke();
 				context.fill();
+			} else if(board[i][j] == 5){
+				context.drawImage(pill,center.x-55,center.y-25,120,120);
 			}
 		}
 	}
@@ -228,6 +242,7 @@ function rotatePacman(){
 function UpdatePosition() {
 	board[shape.i][shape.j] = 0;
 	var x = GetKeyPressed();
+	var bool = false;
 	if (x == 1) {
 		if (shape.j > 0 && board[shape.i][shape.j - 1] != 4) {
 			shape.j--;
@@ -251,6 +266,36 @@ function UpdatePosition() {
 	if (board[shape.i][shape.j] == 1) {
 		score++;
 		musicEat.play();
+	}
+	var currTime = new Date();
+	if(pillTime!=null && (currTime - pillTime) / 1000 >=5){
+		console.log("its been more then 5 sec at speed");
+		console.log(interval);
+		clearInterval(interval);
+		interval = setInterval(UpdatePosition,250);
+		pillTime = null;
+	}
+	if (pillTime == null && board[shape.i][shape.j] == 5) {
+		pillTime = new Date();
+		musicExtra.play();
+		window.clearInterval(interval);
+		interval = setInterval(UpdatePosition,100);
+		console.log("its first pill");
+		console.log(pillTime);
+	}
+	else if (board[shape.i][shape.j] == 5 && pillTime != null){
+		if((currTime - pillTime) / 1000 <5){
+			console.log("its second pill in less then 5 sec");
+			console.log((currTime - pillTime) / 1000);
+			pillTime = new Date();
+			musicExtra.play();
+		}
+		else{
+			// console.log("its second pill after 5 sec");
+			// pillTime = new Date();
+			// musicExtra.play();
+			// setInterval(UpdatePosition,100);
+		}
 	}
 	board[shape.i][shape.j] = 2;
 	var currentTime = new Date();
