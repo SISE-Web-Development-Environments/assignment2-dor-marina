@@ -86,7 +86,18 @@
 					<button class="button" onclick="backToWelcome()">Back</button>
 				</form>
 			</div>
-			<div id="properties">
+			<div id="properties" class="notGame">
+				<br/>
+				<form action="" name="properties" id="form">
+					Proporties
+					<img src="crazyRed.gif" class="image3">
+					<br/>
+					<br/>
+					<button class="button" id="keyButton" type="submit" onclick="setKey('up')">&#129093;&ensp;</button>
+					<button class="button" id="keyButton" type="submit" onclick="setKey('down')">&#129095;&ensp;</button>
+					<button class="button" id="keyButton" type="submit" onclick="setKey('left')">&#129092;&ensp;</button>
+					<button class="button" id="keyButton" type="submit" onclick="setKey('right')">&#129094;&ensp;</button>
+				</form>
 			</div>
 			<section id="allStuffForGame">
 				<nav id="menu">
@@ -136,15 +147,16 @@
 			var check = sessionStorage.getItem(inputUserName);
 			if(inputPassword === check){
 				$('#login').hide();
-				$('#game').show();
-				$('#menu').show();
-				$('#time').show();
-				$('#score').show();
-				$('#name').show();
-				$('#name label').append(inputUserName);
-				$('#allStuffForGame').show();
-				backMusic.play();
-				start_time = new Date();
+				$('#properties').show();
+				// $('#game').show();
+				// $('#menu').show();
+				// $('#time').show();
+				// $('#score').show();
+				// $('#name').show();
+				// $('#name label').append(inputUserName);
+				// $('#allStuffForGame').show();
+				// backMusic.play();
+				// start_time = new Date();
 			}
 			else{
 				window.alert("Your Username or Password is invalid. (Maybe you didn't sign in?)");
@@ -239,6 +251,9 @@
 			else{
 				window.alert("check your form");
 			}
+		};
+		function setKey(value){
+
 		};
 	</script>
 	<script>

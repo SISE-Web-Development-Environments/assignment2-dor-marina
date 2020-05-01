@@ -35,7 +35,7 @@ html, body{
     font-size: 120px;
 }
 
-#login, #register{
+#login, #register, #properties{
     font-family: 'Press Start 2p';
     font-size: 30px;
 }
@@ -48,6 +48,12 @@ html, body{
     right: 10px;
 }
 .image2{
+    width: 40px;
+    height: auto;
+    position: absolute;
+}
+
+.image3{
     width: 40px;
     height: auto;
     position: absolute;
@@ -72,10 +78,21 @@ html, body{
     font-size: 20px;
 
 }
+
+#keyButton{
+  width: 60px;
+}
 .button:active {
 	box-shadow: none;
 	position: relative;
 	top: .2em;
+}
+
+#keyButton:{
+  box-shadow: none;
+	position: relative;
+  top: .2em;
+  color: red;
 }
 
 input[type=text], input[type=password]{
