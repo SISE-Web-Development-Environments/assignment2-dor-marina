@@ -64,10 +64,13 @@ function Start() {
 				(i == 2 && j == 8) ||
 				(i == 1 && j == 7) ||
 				(i == 3 && j == 7)
-			) {
+			) { // walls
 				board[i][j] = 4;
-			}  else if(i==0 && j==9 || i==0 && j==0 || i==9 && j==0 || i==9 && j==9){
+			}  else if(i==0 && j==9 || i==0 && j==0 || i==9 && j==0 || i==9 && j==9){ // pills
 				board[i][j]= 5;
+			}
+			else if(i==5 && j==5){ // clock
+				board[i][j]=6;
 			}
 			 else {
 				var randomNum = Math.random();
@@ -110,6 +113,7 @@ function Start() {
 	// clearInterval(interval);
 	// }
 	interval = setInterval(UpdatePosition, 250);
+	setInterval(showClock,5000);
 }
 
 function findRandomEmptyCell(board) {
@@ -167,6 +171,9 @@ function Draw() {
 				context.fill();
 			} else if(board[i][j] == 5){
 				context.drawImage(pill,center.x-55,center.y-25,120,120);
+			} else if(board[i][j] == 6){
+				var clockShowTime = new Date();
+				context.drawImage(clock,center.x-30,center.y-30,60,60);
 			}
 		}
 	}
@@ -241,6 +248,9 @@ function rotatePacman(){
 		}
 	}
 }
+function showClock(){
+  board[5][5] = board[5][5] == 0 ? 6 : 0;
+}
 
 function UpdatePosition() {
 	board[shape.i][shape.j] = 0;
@@ -299,6 +309,10 @@ function UpdatePosition() {
 			// musicExtra.play();
 			// setInterval(UpdatePosition,100);
 		}
+	}
+	else if(board[shape.i][shape.j] == 6){
+		console.log(start_time.getTime());
+		start_time = new Date(start_time.getTime() + 10*1000);
 	}
 	board[shape.i][shape.j] = 2;
 	var currentTime = new Date();

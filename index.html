@@ -22,11 +22,13 @@
 			</script>
 		<script>
 			$(document).ready(function(){
-				$('div:not(#welcome)').hide();
-				// $("#allStuffForGame").show();
-				$('#welcome').show();
-				// $('div').hide();
-				// $("#game").show();
+				// $('div:not(#welcome)').hide();
+				$("#allStuffForGame").show();
+				// $('#welcome').show();
+				$('div').hide();
+				$("#game").show();
+				$("#score").show();
+				start_time = new Date();
 
 			});
 		</script>
@@ -109,6 +111,7 @@
 				</div>
 				<div id="game" class="game">
 					<img id="pill" src="pictures/pill2.gif" alt="The Pill" style="display: none;">
+					<img id="clock" src="pictures/clock3.gif" alt="Clock" style="display: none;">
 					<canvas id="canvas" height="600" width="600"></canvas>
 					<br/>
 				</div>
