@@ -30,6 +30,7 @@ $(document).ready(function() {
 });
 
 function Start() {
+	console.log("start");
 	pill = document.getElementById("pill");
 	musicEat.volume = 0.1;
 	backMusic.volume = 0.1;
@@ -44,45 +45,37 @@ function Start() {
 	var cnt = 100;
 	var food_remain = 50;
 	var pacman_remain = 1;
-	for (var i = 0; i < 10; i++) {
-		board[i] = new Array();
-		for (var j = 0; j < 10; j++) {
-		}
-	}
-	for (var i = 0; i < 10; i++) {
+	for (var i = 0; i < 15; i++) {
 		board[i] = new Array();
 		//put obstacles in (i=3,j=3) and (i=3,j=4) and (i=3,j=5), (i=6,j=1) and (i=6,j=2)
 		for (var j = 0; j < 10; j++) {
 			if (
-				(i == 3 && j == 3) ||
-				(i == 3 && j == 4) ||
-				(i == 3 && j == 5) ||
-				(i == 2 && j == 5) ||
-				(i == 4 && j == 5) ||
+				(i == 9 && j == 3) ||
+				(i == 9 && j == 4) ||
+				(i == 9 && j == 5) ||
+				(i == 8 && j == 5) ||
+				(i == 10 && j == 5) ||
 				(i == 6 && j == 1) ||
 				(i == 6 && j == 2) ||
 				(i == 2 && j == 1) ||
 				(i == 3 && j == 1) ||
-				(i == 8 && j == 8) ||
-				(i == 8 && j == 7) ||
-				(i == 7 && j == 8) ||
-				(i == 8 && j == 3) ||
-				(i == 9 && j == 3) ||
+				(i == 13 && j == 8) ||
+				(i == 13 && j == 7) ||
+				(i == 12 && j == 8) ||
+				(i == 13 && j == 3) ||
+				(i == 14 && j == 3) ||
 				(i == 2 && j == 7) ||
 				(i == 2 && j == 8) ||
 				(i == 1 && j == 7) ||
 				(i == 3 && j == 7)
 			) { // walls
 				board[i][j] = 4;
-			}  else if(i==1 && j==8 || i==1 && j==1 || i==9 && j==2 || i==7 && j==7){ // pills
+			}  else if(i==1 && j==8 || i==1 && j==1 || i==14 && j==2 || i==12 && j==7){ // pills
 				board[i][j]= 5;
 			}
-			else if(i==5 && j==5){ // clock
+			else if(i==7 && j==5){ // clock
 				board[i][j]=6;
 			}
-			// else if(i==9 && j==9){// monster
-			// 	board[i][j]=7;
-			// }
 			else if(i==0 && j==0){// coin
 				board[i][j]=20;
 			}
@@ -91,7 +84,8 @@ function Start() {
 				if (randomNum <= (1.0 * food_remain) / cnt) {
 					food_remain--;
 					board[i][j] = 1;
-				} else if (randomNum < (1.0 * (pacman_remain + food_remain)) / cnt) {
+				} else 
+				if (randomNum < (1.0 * (pacman_remain + food_remain)) / cnt) {
 					shape.i = i;
 					shape.j = j;
 					pacman_remain--;
@@ -130,10 +124,11 @@ function Start() {
 }
 
 function findRandomEmptyCell(board) {
-	var i = Math.floor(Math.random() * 9 + 1);
+	var i = Math.floor(Math.random() * 14 + 1);
+	console.log(i);
 	var j = Math.floor(Math.random() * 9 + 1);
 	while (board[i][j] != 0) {
-		i = Math.floor(Math.random() * 9 + 1);
+		i = Math.floor(Math.random() * 14 + 1);
 		j = Math.floor(Math.random() * 9 + 1);
 	}
 	return [i, j];
@@ -159,7 +154,7 @@ function Draw() {
 	lblScore.value = score;
 	lblTime.value = time_elapsed;
 	lblLifes.value = lifesRemain;
-	for (var i = 0; i < 10; i++) {
+	for (var i = 0; i < 15; i++) {
 		for (var j = 0; j < 10; j++) {
 			var center = new Object();
 			center.x = i * 60 + 30;
@@ -203,7 +198,7 @@ function Draw() {
 
 function rotatePacman(){
 	var x = GetKeyPressed();
-	for (var i = 0; i < 10; i++) {
+	for (var i = 0; i < 15; i++) {
 		for (var j = 0; j < 10; j++) {
 			var center = new Object();
 			center.x = i * 60 + 30;
@@ -271,7 +266,7 @@ function rotatePacman(){
 	}
 }
 function showClock(){
-  board[5][5] = board[5][5] == 0 ? 6 : 0;
+  board[7][5] = board[7][5] == 0 ? 6 : 0;
 }
 
 function UpdatePosition() {
@@ -293,7 +288,7 @@ function UpdatePosition() {
 		}
 	}
 	if (x == 4) {
-		if (shape.i < 9 && board[shape.i + 1][shape.j] != 4) {
+		if (shape.i < 15 && board[shape.i + 1][shape.j] != 4) {
 			shape.i++;
 		}
 	}
@@ -398,7 +393,7 @@ function clearIntervals(){
 
 function UpdateCoinPosition(){
 	var x = Math.floor(Math.random() * 4 + 1);
-	for (var i = 0; i < 10; i++) {
+	for (var i = 0; i < 15; i++) {
 		for (var j = 0; j < 10; j++) {
 			if(board[i][j]==20){
 				board[i][j]=prevCoinValue;
@@ -408,7 +403,7 @@ function UpdateCoinPosition(){
 					board[i][j+1]=20;
 					return;
 				}
-				else if(x==2 && i+1<10 && board[i+1][j]!=4){
+				else if(x==2 && i+1<15 && board[i+1][j]!=4){
 					prevCoinValue = board[i+1][j];
 					board[i+1][j]=20;
 					return;
@@ -455,7 +450,7 @@ function checkIfDead(){
 }
 
 function isPacmanNear(i,j){
-	for(var x = 0; x <10; x++){
+	for(var x = 0; x <15; x++){
 		for(var y = 0; y < 10; y++){
 			if(board[x][y]==2){
 				if(x<i && y<j){
@@ -512,7 +507,7 @@ function isPacmanNear(i,j){
 				else{
 					var x = Math.floor(Math.random() * 4 + 1);
 					while(true){
-						if(x==1 && i+1<10 && board[i+1][j]!=4 ){
+						if(x==1 && i+1<15 && board[i+1][j]!=4 ){
 							return [1,0];
 						}
 						else if(x==2 && i-1>=0 && board[i-1][j]!=4){

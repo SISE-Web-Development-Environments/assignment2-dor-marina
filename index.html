@@ -120,7 +120,7 @@
 					<img id="ghost4" src="pictures/ghost4.gif" alt="Ghost" style="display: none;">
 					<img id="coin" src="pictures/coin.gif" alt="Coin" style="border-radius: 100%; display: none;">
 					<label id="lblFinalScore" style="padding-left: 40%;"></label>
-					<canvas id="canvas" height="600" width="600"></canvas>
+					<canvas id="canvas" height="600" width="900"></canvas>
 					<br/>
 				</div>
 				<div id="restart">
@@ -176,8 +176,11 @@
 				$('#lblName').append("Player: "+ inputUserName);
 				$('#allStuffForGame').show();
 				backMusic.play();
-				Start();
 				start_time = new Date();
+				$("#lblFinalScore").hide();
+				$("#lblFinalScore").html('');
+				clearIntervals();
+				Start();
 			}
 			else{
 				window.alert("Your Username or Password is invalid. (Maybe you didn't sign in?)");
