@@ -1,15 +1,19 @@
 var context;
 var shape = new Object();
-var board;
+var board = new Array();
 var score;
 var pac_color;
 var start_time;
 var time_elapsed;
 var interval;
-var myMusic;
-var musicEat;
-var musicExtra;
-var backMusic;
+var clockInterval;
+var coinInterval;
+var myMusic = new Audio("music\\pacman_beginning.wav");
+var musicEat =new Audio("music\\pacman_chomp.wav");
+var musicExtra  = new Audio("music/Extra.mp3");
+var backMusic= new Audio("music\\Pac-Man Fever (Eat Em Up) 2015.mp3");
+var musicDead = new Audio("music/Death.mp3");
+var musicEnd  = new Audio("music/sad.mp3");
 var firstMouth;
 var secMouth;
 var firstBall;
@@ -17,30 +21,34 @@ var secBall;
 var lifesRemain;
 var pill;
 var pillTime;
+var prevCoinValue;
+var dead;
 
 $(document).ready(function() {
 	context = canvas.getContext("2d");
-	Start();
 	firstMouth = 0.15; secMouth = 1.85, firstBall = 5, secBall = -15;
 });
 
 function Start() {
 	pill = document.getElementById("pill");
-	myMusic = new Audio("music\\pacman_beginning.wav");
-	musicEat = new Audio("music\\pacman_chomp.wav");
-	backMusic = new Audio("music\\Pac-Man Fever (Eat Em Up) 2015.mp3");
-	musicExtra = new Audio("music/Extra.mp3");
-	musicEat.volume = 0.5;
+	musicEat.volume = 0.1;
 	backMusic.volume = 0.1;
 	backMusic.loop = true;
 	pillTime = null;
+	prevCoinValue =0;
 	board = new Array();
 	score = 0;
+	dead = false;
 	lifesRemain = 5;
 	pac_color = "yellow";
 	var cnt = 100;
 	var food_remain = 50;
 	var pacman_remain = 1;
+	for (var i = 0; i < 10; i++) {
+		board[i] = new Array();
+		for (var j = 0; j < 10; j++) {
+		}
+	}
 	for (var i = 0; i < 10; i++) {
 		board[i] = new Array();
 		//put obstacles in (i=3,j=3) and (i=3,j=4) and (i=3,j=5), (i=6,j=1) and (i=6,j=2)
@@ -66,11 +74,17 @@ function Start() {
 				(i == 3 && j == 7)
 			) { // walls
 				board[i][j] = 4;
-			}  else if(i==0 && j==9 || i==0 && j==0 || i==9 && j==0 || i==9 && j==9){ // pills
+			}  else if(i==1 && j==8 || i==1 && j==1 || i==9 && j==2 || i==7 && j==7){ // pills
 				board[i][j]= 5;
 			}
 			else if(i==5 && j==5){ // clock
 				board[i][j]=6;
+			}
+			// else if(i==9 && j==9){// monster
+			// 	board[i][j]=7;
+			// }
+			else if(i==0 && j==0){// coin
+				board[i][j]=20;
 			}
 			 else {
 				var randomNum = Math.random();
@@ -89,6 +103,7 @@ function Start() {
 			}
 		}
 	}
+	makeMonsters();
 	while (food_remain > 0) {
 		var emptyCell = findRandomEmptyCell(board);
 		board[emptyCell[0]][emptyCell[1]] = 1;
@@ -109,11 +124,9 @@ function Start() {
 		},
 		false
 	);
-	// if(interval!=null){
-	// clearInterval(interval);
-	// }
 	interval = setInterval(UpdatePosition, 250);
-	setInterval(showClock,5000);
+	clockInterval = setInterval(showClock,5000);
+	coinInterval = setInterval(UpdateCoinPosition,1000);
 }
 
 function findRandomEmptyCell(board) {
@@ -172,8 +185,17 @@ function Draw() {
 			} else if(board[i][j] == 5){
 				context.drawImage(pill,center.x-55,center.y-25,120,120);
 			} else if(board[i][j] == 6){
-				var clockShowTime = new Date();
 				context.drawImage(clock,center.x-30,center.y-30,60,60);
+			} else if(board[i][j] == 7){
+				context.drawImage(ghost1,center.x-30,center.y-30,60,60);
+			} else if(board[i][j] == 8){
+				context.drawImage(ghost2,center.x-30,center.y-30,60,60);
+			} else if(board[i][j] == 9){
+				context.drawImage(ghost3,center.x-30,center.y-30,60,60);
+			} else if(board[i][j] == 10){
+				context.drawImage(ghost4,center.x-30,center.y-30,60,60);
+			}else if(board[i][j] == 20){
+			context.drawImage(coin,center.x-30,center.y-30,60,60);
 			}
 		}
 	}
@@ -255,7 +277,6 @@ function showClock(){
 function UpdatePosition() {
 	board[shape.i][shape.j] = 0;
 	var x = GetKeyPressed();
-	var bool = false;
 	if (x == 1) {
 		if (shape.j > 0 && board[shape.i][shape.j - 1] != 4) {
 			shape.j--;
@@ -282,8 +303,6 @@ function UpdatePosition() {
 	}
 	var currTime = new Date();
 	if(pillTime!=null && (currTime - pillTime) / 1000 >=5){
-		console.log("its been more then 5 sec at speed");
-		console.log(interval);
 		clearInterval(interval);
 		interval = setInterval(UpdatePosition,250);
 		pillTime = null;
@@ -293,35 +312,63 @@ function UpdatePosition() {
 		musicExtra.play();
 		window.clearInterval(interval);
 		interval = setInterval(UpdatePosition,100);
-		console.log("its first pill");
-		console.log(pillTime);
 	}
 	else if (board[shape.i][shape.j] == 5 && pillTime != null){
 		if((currTime - pillTime) / 1000 <5){
-			console.log("its second pill in less then 5 sec");
-			console.log((currTime - pillTime) / 1000);
 			pillTime = new Date();
 			musicExtra.play();
 		}
-		else{
-			// console.log("its second pill after 5 sec");
-			// pillTime = new Date();
-			// musicExtra.play();
-			// setInterval(UpdatePosition,100);
-		}
 	}
 	else if(board[shape.i][shape.j] == 6){
-		console.log(start_time.getTime());
 		start_time = new Date(start_time.getTime() + 10*1000);
+		clearInterval(clockInterval);
 	}
-	board[shape.i][shape.j] = 2;
+	else if(board[shape.i][shape.j] == 7){
+		looser1();
+	}
+	else if(board[shape.i][shape.j] == 8){
+		looser2();
+	}
+	else if(board[shape.i][shape.j] == 9){
+		looser3();
+	}
+	else if(board[shape.i][shape.j] == 10){
+		looser4();
+	}
+	else if(board[shape.i][shape.j] == 20){
+		clearInterval(coinInterval);
+		score = score+50;
+	}
+	if(dead){
+		board[shape.i][shape.j] = 0;
+		var emptyCell = findRandomEmptyCell(board);
+		board[emptyCell[0]][emptyCell[1]] = 2;
+		shape.i = emptyCell[0];
+		shape.j = emptyCell[1];
+		dead = false;
+	}
+	else{
+		board[shape.i][shape.j] = 2;
+	}
 	var currentTime = new Date();
 	time_elapsed = (currentTime - start_time) / 1000;
 	if (score >= 20 && time_elapsed <= 10) {
 		pac_color = "green";
 	}
+	//var timeChosen = sessionStorage.getItem("time");
+	var timeChosen = 30;
+	if(time_elapsed>=timeChosen){
+		clearIntervals();
+		showFinalResults();
+		if(score<100){
+			setTimeout(function(){ window.alert("you are better than " + score + " points!");}, 500);
+		}
+		else{
+			setTimeout(function(){ 	window.alert("Winner!!!");}, 500);
+		}
+	}
 	if (score == 50) {
-		window.clearInterval(interval);
+		clearIntervals();
 		window.alert("Game completed");
 		backMusic.pause();
 		backMusic.currentTime = 0;
@@ -329,4 +376,161 @@ function UpdatePosition() {
 		Draw();
 		rotatePacman();
 	}
+}
+
+
+function clearIntervals(){
+	if (typeof(interval) !== 'undefined')
+		clearInterval(interval);
+	if (typeof(clockInterval) !== 'undefined')
+		clearInterval(clockInterval);
+	if (typeof(ghost1Interval) !== 'undefined') 
+		clearInterval(ghost1Interval);
+	if (typeof(ghost2Interval) !== 'undefined') 
+		clearInterval(ghost2Interval);
+	if (typeof(ghost3Interval) !== 'undefined') 
+		clearInterval(ghost3Interval);
+	if (typeof(ghost4Interval) !== 'undefined') 
+		clearInterval(ghost4Interval);
+	if (typeof(coinInterval) !== 'undefined') 
+		clearInterval(coinInterval);
+}
+
+function UpdateCoinPosition(){
+	var x = Math.floor(Math.random() * 4 + 1);
+	for (var i = 0; i < 10; i++) {
+		for (var j = 0; j < 10; j++) {
+			if(board[i][j]==20){
+				board[i][j]=prevCoinValue;
+				while(true){
+				if(x==1 && j+1<10 && board[i][j+1]!=4 ){
+					prevCoinValue = board[i][j+1];
+					board[i][j+1]=20;
+					return;
+				}
+				else if(x==2 && i+1<10 && board[i+1][j]!=4){
+					prevCoinValue = board[i+1][j];
+					board[i+1][j]=20;
+					return;
+				}
+				else if(x==3 && j-1>0 && board[i][j-1]!=4){
+					prevCoinValue = board[i][j-1];
+					board[i][j-1]=20;
+					return;
+				}
+				else if(x==4 && i-1>0 && board[i-1][j]!=4){
+					prevCoinValue = board[i-1][j];
+					board[i-1][j]=20;
+					return;
+				}
+				else x = Math.floor(Math.random() * 4 + 1);
+			}
+			}
+		}
+	}
+}
+
+function showFinalResults(){
+	$("#lblFinalScore").show();
+	$('#lblFinalScore').append("Your final score is: "+ score);
+}
+
+function checkIfDead(){
+	if(lifesRemain-1 == 0){
+		showFinalResults();
+		lblLifes.value = 0;
+		musicEnd.play();
+		clearIntervals();
+		setTimeout(function(){ alert("Loser!"); }, 500);
+		backMusic.pause();
+		backMusic.currentTime = 0;
+	}
+	else{
+		clearInterval(interval);
+		interval = setInterval(UpdatePosition,250);
+		lifesRemain--;
+		dead = true;
+		score = score -10;
+	} 
+}
+
+function isPacmanNear(i,j){
+	for(var x = 0; x <10; x++){
+		for(var y = 0; y < 10; y++){
+			if(board[x][y]==2){
+				if(x<i && y<j){
+					var rand = Math.floor(Math.random() * 1 + 1);
+					if(rand == 0 && board[i-1][j]!=4){
+						return[-1,0];
+					}
+					else if(rand==1 && board[i][j-1]!=4){
+						return[0,-1];
+					}
+				}
+				if(x>i && y<j){
+					var rand = Math.floor(Math.random() * 1 + 1);
+					if(rand == 0 && board[i+1][j]!=4){
+						return[1,0];
+					}
+					else if(rand==1 && board[i][j-1]!=4){
+						return[0,-1];
+					}
+				}
+				if(x<i && y>j){
+					var rand = Math.floor(Math.random() * 1 + 1);
+					if(rand == 0 && board[i-1][j]!=4){
+						return[-1,0];
+					}
+					else if(rand==1 && board[i][j+1]!=4){
+						return[0,1];
+					}
+				}
+				if(x>i && y>j){
+					var rand = Math.floor(Math.random() * 1 + 1);
+					if(rand == 0 && board[i+1][j]!=4){
+						return[1,0];
+					}
+					else if(rand==1 && board[i][j+1]!=4){
+						return[0,1];
+					}
+				}
+				if(y<j &&board[i][j-1]!=4 )
+				{
+					return[0,-1];
+				}
+				else if(x>i && board[i+1][j]!=4)
+				{
+						return[1,0];
+				}
+				else if(y>j && board[i][j+1]!=4)
+				{
+						return[0,1];
+				}
+				else if(x<i &&board[i-1][j]!=4 ){
+						return[-1,0];
+				}
+				else{
+					var x = Math.floor(Math.random() * 4 + 1);
+					while(true){
+						if(x==1 && i+1<10 && board[i+1][j]!=4 ){
+							return [1,0];
+						}
+						else if(x==2 && i-1>=0 && board[i-1][j]!=4){
+							return[-1,0];
+						}
+						else if(x==3 && j+1<10 && board[i][j+1]!=4){
+							return[0, 1];
+						}
+						else if(x==4 && j-1>=0 && board[i][j-1]!=4){
+							return[0,-1];
+						}
+						else{
+							x = Math.floor(Math.random() * 4 + 1);
+						}
+					}
+				}
+			}
+		}
+	}
+	return[-2,-2];
 }

@@ -6,6 +6,7 @@
 		<link rel="stylesheet" href="formStyle.css"/>
 		<link rel="stylesheet" href="gameStyle.css"/>
 		<script src="./jquery-3.4.1.slim.min.js"></script>
+		<script type="text/javascript" src="./monsters.js"></script>
 		<script type="text/javascript" src="./app.js"></script>
 		<script src="./formValidation.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -22,13 +23,14 @@
 			</script>
 		<script>
 			$(document).ready(function(){
-				// $('div:not(#welcome)').hide();
-				$("#allStuffForGame").show();
-				// $('#welcome').show();
-				$('div').hide();
-				$("#game").show();
-				$("#score").show();
-				start_time = new Date();
+				$('div:not(#welcome)').hide();
+				// $("#allStuffForGame").show();
+				$('#welcome').show();
+				// $('div').hide();
+				// $("#game").show();
+				// $("#score").show();
+				// $('#lblFinalScore').show();
+				// start_time = new Date();
 
 			});
 		</script>
@@ -112,6 +114,12 @@
 				<div id="game" class="game">
 					<img id="pill" src="pictures/pill2.gif" alt="The Pill" style="display: none;">
 					<img id="clock" src="pictures/clock3.gif" alt="Clock" style="display: none;">
+					<img id="ghost1" src="pictures/ghost3.gif" alt="Ghost" style="display: none;">
+					<img id="ghost2" src="pictures/ghost2.gif" alt="Ghost" style="display: none;">
+					<img id="ghost3" src="pictures/ghost5.gif" alt="Ghost" style="display: none;">
+					<img id="ghost4" src="pictures/ghost4.gif" alt="Ghost" style="display: none;">
+					<img id="coin" src="pictures/coin.gif" alt="Coin" style="border-radius: 100%; display: none;">
+					<label id="lblFinalScore" style="padding-left: 40%;"></label>
 					<canvas id="canvas" height="600" width="600"></canvas>
 					<br/>
 				</div>
@@ -144,8 +152,10 @@
 </script>
 <script type="text/javascript">
 		function restart(){
+			$("#lblFinalScore").hide();
+			$("#lblFinalScore").html('');
 			start_time = new Date();
-			clearInterval(interval);
+			clearIntervals();
 			Start();
 		}
 	</script>
@@ -166,6 +176,7 @@
 				$('#lblName').append("Player: "+ inputUserName);
 				$('#allStuffForGame').show();
 				backMusic.play();
+				Start();
 				start_time = new Date();
 			}
 			else{
