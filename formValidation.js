@@ -56,4 +56,69 @@
      $.validator.addMethod("namecheck", function(value) {
         return /^[A-Za-z]*$/.test(value) // consists of only these
      });
+     $("form[name='properties']").validate({
+      rules:{
+        time:{
+          required: true,
+          timecheckDigits:true,
+          timecheck:true
+        },
+        ball5:{
+          ball5DupCheck:true
+        },
+        ball15:{
+          ball15DupCheck:true
+        },
+        ball25:{
+          ball25DupCheck:true
+        }
+      },
+      messages: {
+        time:{
+          required: "Please enter the time limit for the game",
+          timecheckDigits: "Must enter digits only",
+          timecheck: "The game must be at least 60 seconds"
+        },
+        ball5:{
+          ball5DupCheck:"please chose a diffrent color"
+        },
+        ball15:{
+          ball15DupCheck:"please chose a diffrent color"
+        },
+        ball25:{
+          ball25DupCheck:"please chose a diffrent color"
+        }
+      }
+    });
+    $.validator.addMethod("timecheckDigits", function(value) {
+      return /^[0-9]*$/.test(value) // consists of only these
+   });
+
+   $.validator.addMethod("timecheck", function(value) {
+    if(parseInt(value)<60){
+      return false;
+    }
+    return true;
+  });
+
+  $.validator.addMethod("ball5DupCheck", function(value) {
+    if(value==document.getElementById("ball15").value || value==document.getElementById("ball25").value){
+      return false;
+    }
+    return true;
+ });
+
+ $.validator.addMethod("ball15DupCheck", function(value) {
+  if(value==document.getElementById("ball5").value || value==document.getElementById("ball25").value){
+    return false;
+  }
+  return true;
+});
+
+$.validator.addMethod("ball25DupCheck", function(value) {
+  if(value==document.getElementById("ball15").value || value==document.getElementById("ball5").value){
+    return false;
+  }
+  return true;
+});
   });

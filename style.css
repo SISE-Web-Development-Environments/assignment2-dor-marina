@@ -79,20 +79,74 @@ html, body{
 
 }
 
-#keyButton{
+#upButton{
   width: 60px;
+}
+#downButton{
+  width: 60px;
+}
+#leftButton{
+  width: 60px;
+}
+#rightButton{
+  width: 60px;
+}
+.button:visited{
+  font-family: 'Press Start 2p';
+  text-align: center;
+display: inline-block;
+margin:5px;
+  font-weight: bold;
+  padding: 10px 0 10px 10px ;
+  background-color: lightgray;
+  text-shadow: -1px -1px black, 1px 1px white;
+  color: gray;
+  -webkit-border-radius: 7px;
+-moz-border-radius: 7px;
+-o-border-radius: 7px;
+border-radius: 7px;
+  box-shadow: 0 .2em gray; 
+  cursor: pointer;
+  font-size: 20px;
+
 }
 .button:active {
 	box-shadow: none;
 	position: relative;
 	top: .2em;
 }
-
-#keyButton:{
+#upButton:focus{
   box-shadow: none;
 	position: relative;
   top: .2em;
-  color: red;
+}
+
+#downButton:focus{
+  box-shadow: none;
+	position: relative;
+  top: .2em;
+}
+
+#leftButton:focus{
+  box-shadow: none;
+	position: relative;
+  top: .2em;
+}
+
+#rightButton:focus{
+  box-shadow: none;
+	position: relative;
+  top: .2em;
+}
+
+#timeLimit{
+  position: relative;
+  height: 25px;
+  margin: 0;
+}
+
+#ball5,#ball15,#ball25{
+  width: 15%;
 }
 
 input[type=text], input[type=password]{
