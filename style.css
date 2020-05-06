@@ -9,14 +9,14 @@ html, body{
 }
 @font-face {
     font-family: "pacmanFont";
-    src: url(PAC-FONT.ttf);
+    src: url(fonts\\PAC-FONT.ttf);
 }
 @font-face {
-    src: url(PressStart2P-Regular.ttf);
+    src: url(fonts\\PressStart2P-Regular.ttf);
     font-family: 'Press Start 2p';
   }
 .notGame {
-    background: url('packmanBackgroundHD.jpg') no-repeat center center fixed;
+    background: url('pictures\\packmanBackgroundHD.jpg') no-repeat center center fixed;
     position:absolute;
     left:0;
     right:0;

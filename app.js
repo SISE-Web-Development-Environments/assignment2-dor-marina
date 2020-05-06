@@ -8,22 +8,35 @@ var time_elapsed;
 var interval;
 var myMusic;
 var musicEat;
+var musicExtra;
 var backMusic;
+var firstMouth;
+var secMouth;
+var firstBall;
+var secBall;
+var lifesRemain;
+var pill;
+var pillTime;
 
 $(document).ready(function() {
 	context = canvas.getContext("2d");
 	Start();
+	firstMouth = 0.15; secMouth = 1.85, firstBall = 5, secBall = -15;
 });
 
 function Start() {
-	myMusic = new Audio("pacman_beginning.wav");
-	musicEat = new Audio("pacman_chomp.wav");
-	backMusic = new Audio("Pac-Man Fever (Eat Em Up) 2015.mp3");
+	pill = document.getElementById("pill");
+	myMusic = new Audio("music\\pacman_beginning.wav");
+	musicEat = new Audio("music\\pacman_chomp.wav");
+	backMusic = new Audio("music\\Pac-Man Fever (Eat Em Up) 2015.mp3");
+	musicExtra = new Audio("music/Extra.mp3");
 	musicEat.volume = 0.5;
-	backMusic.volume = 0.5;
+	backMusic.volume = 0.1;
 	backMusic.loop = true;
+	pillTime = null;
 	board = new Array();
 	score = 0;
+	lifesRemain = 5;
 	pac_color = "yellow";
 	var cnt = 100;
 	var food_remain = 50;
@@ -53,7 +66,10 @@ function Start() {
 				(i == 3 && j == 7)
 			) {
 				board[i][j] = 4;
-			} else {
+			}  else if(i==0 && j==9 || i==0 && j==0 || i==9 && j==0 || i==9 && j==9){
+				board[i][j]= 5;
+			}
+			 else {
 				var randomNum = Math.random();
 				if (randomNum <= (1.0 * food_remain) / cnt) {
 					food_remain--;
@@ -122,21 +138,14 @@ function Draw() {
 	canvas.width = canvas.width; //clean board
 	lblScore.value = score;
 	lblTime.value = time_elapsed;
+	lblLifes.value = lifesRemain;
 	for (var i = 0; i < 10; i++) {
 		for (var j = 0; j < 10; j++) {
 			var center = new Object();
 			center.x = i * 60 + 30;
 			center.y = j * 60 + 30;
 			if (board[i][j] == 2) {
-				context.beginPath();
-				context.arc(center.x, center.y, 30, 0.15 * Math.PI, 1.85 * Math.PI); // half circle
-				context.lineTo(center.x, center.y);
-				context.fillStyle = pac_color; //color
-				context.fill();
-				context.beginPath();
-				context.arc(center.x + 5, center.y - 15, 5, 0, 2 * Math.PI); // circle
-				context.fillStyle = "blue" //color
-				context.fill();
+				rotatePacman();
 			} else if (board[i][j] == 1) {
 				context.beginPath();
 				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
@@ -153,6 +162,78 @@ function Draw() {
 				context.strokeStyle = "#009BFF";
 				context.stroke();
 				context.fill();
+			} else if(board[i][j] == 5){
+				context.drawImage(pill,center.x-55,center.y-25,120,120);
+			}
+		}
+	}
+}
+
+function rotatePacman(){
+	var x = GetKeyPressed();
+	for (var i = 0; i < 10; i++) {
+		for (var j = 0; j < 10; j++) {
+			var center = new Object();
+			center.x = i * 60 + 30;
+			center.y = j * 60 + 30;
+			if (board[i][j] == 2  && x==1 ) { //up
+				context.beginPath();
+				context.arc(center.x, center.y, 30, -0.35* Math.PI,1.35* Math.PI); // half circle
+				context.lineTo(center.x, center.y);
+				context.fillStyle = pac_color; //color
+				context.fill();
+				context.beginPath();
+				context.arc(center.x +15, center.y - 5, 5, 0, 2 * Math.PI); // circle
+				context.fillStyle = "blue" //color
+				context.fill();
+				firstMouth = -0.35, secMouth = 1.35, firstBall = 15; secBall = -5;
+			}
+			else if(board[i][j] == 2 && x==2){ //down
+				context.beginPath();
+				context.arc(center.x, center.y, 30, -1.35* Math.PI, 0.35* Math.PI); // half circle
+				context.lineTo(center.x, center.y);
+				context.fillStyle = pac_color; //color
+				context.fill();
+				context.beginPath();
+				context.arc(center.x -15, center.y + 5, 5, 0, 2 * Math.PI); // circle
+				context.fillStyle = "blue" //color
+				context.fill();
+				firstMouth = -1.35, secMouth = 0.35, firstBall = -15; secBall = 5;
+			}
+			else if(board[i][j] == 2 && x==3){ //left
+				context.beginPath();
+				context.arc(center.x, center.y, 30, -0.85* Math.PI, 0.85* Math.PI); // half circle
+				context.lineTo(center.x, center.y);
+				context.fillStyle = pac_color; //color
+				context.fill();
+				context.beginPath();
+				context.arc(center.x -5, center.y - 15, 5, 0, 2 * Math.PI); // circle
+				context.fillStyle = "blue" //color
+				context.fill();
+				firstMouth = -0.85, secMouth = 0.85, firstBall = -5; secBall = -15;
+			}
+			else if(board[i][j] == 2&& x==4) { // right
+				context.beginPath();
+				context.arc(center.x, center.y, 30, 0.15* Math.PI, 1.85* Math.PI); // half circle
+				context.lineTo(center.x, center.y);
+				context.fillStyle = pac_color; //color
+				context.fill();
+				context.beginPath();
+				context.arc(center.x +5, center.y - 15, 5, 0, 2 * Math.PI); // circle
+				context.fillStyle = "blue" //color
+				context.fill();
+				firstMouth = 0.15, secMouth = 1.85, firstBall = 5; secBall = -15;
+			}
+			else if(board[i][j] == 2) { // non of the above
+				context.beginPath();
+				context.arc(center.x, center.y, 30, firstMouth* Math.PI, secMouth* Math.PI); // half circle
+				context.lineTo(center.x, center.y);
+				context.fillStyle = pac_color; //color
+				context.fill();
+				context.beginPath();
+				context.arc(center.x + firstBall , center.y + secBall, 5, 0, 2 * Math.PI); // circle
+				context.fillStyle = "blue" //color
+				context.fill();
 			}
 		}
 	}
@@ -161,6 +242,7 @@ function Draw() {
 function UpdatePosition() {
 	board[shape.i][shape.j] = 0;
 	var x = GetKeyPressed();
+	var bool = false;
 	if (x == 1) {
 		if (shape.j > 0 && board[shape.i][shape.j - 1] != 4) {
 			shape.j--;
@@ -185,6 +267,36 @@ function UpdatePosition() {
 		score++;
 		musicEat.play();
 	}
+	var currTime = new Date();
+	if(pillTime!=null && (currTime - pillTime) / 1000 >=5){
+		console.log("its been more then 5 sec at speed");
+		console.log(interval);
+		clearInterval(interval);
+		interval = setInterval(UpdatePosition,250);
+		pillTime = null;
+	}
+	if (pillTime == null && board[shape.i][shape.j] == 5) {
+		pillTime = new Date();
+		musicExtra.play();
+		window.clearInterval(interval);
+		interval = setInterval(UpdatePosition,100);
+		console.log("its first pill");
+		console.log(pillTime);
+	}
+	else if (board[shape.i][shape.j] == 5 && pillTime != null){
+		if((currTime - pillTime) / 1000 <5){
+			console.log("its second pill in less then 5 sec");
+			console.log((currTime - pillTime) / 1000);
+			pillTime = new Date();
+			musicExtra.play();
+		}
+		else{
+			// console.log("its second pill after 5 sec");
+			// pillTime = new Date();
+			// musicExtra.play();
+			// setInterval(UpdatePosition,100);
+		}
+	}
 	board[shape.i][shape.j] = 2;
 	var currentTime = new Date();
 	time_elapsed = (currentTime - start_time) / 1000;
@@ -198,5 +310,6 @@ function UpdatePosition() {
 		backMusic.currentTime = 0;
 	} else {
 		Draw();
+		rotatePacman();
 	}
 }
