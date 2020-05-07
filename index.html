@@ -6,6 +6,7 @@
 		<link rel="stylesheet" href="formStyle.css"/>
 		<link rel="stylesheet" href="gameStyle.css"/>
 		<script src="./jquery-3.4.1.slim.min.js"></script>
+		<script type="text/javascript" src="./monsters.js"></script>
 		<script type="text/javascript" src="./app.js"></script>
 		<script src="./formValidation.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -27,6 +28,9 @@
 				$('#welcome').show();
 				// $('div').hide();
 				// $("#game").show();
+				// $("#score").show();
+				// $('#lblFinalScore').show();
+				// start_time = new Date();
 
 			});
 		</script>
@@ -111,33 +115,46 @@
 					<button class="button" onclick="backToWelcome()">Back</button>
 					<button class="button" id="random" onclick="random1()">Random</button>
 					<br/>
-					<button class="button" id="go" type="submit" onclick="random1()">Go!</button>
+					<button class="button" id="go" type="submit" onclick="go1()">Go!</button>
 				</form>
 			</div>
 			<section id="allStuffForGame">
 				<nav id="menu">
 					<li><a href="#welcome" onclick="backToWelcome()">Welcome</a></li>
-					<li><a href="#register" onclick="switchToLogin()">Register</a></li>
-					<li><a href="#login" onclick="switchToSignIn()">Log in</a></li>
+					<li><a href="#register" onclick="switchToSignIn()">Register</a></li>
+					<li><a href="#login" onclick="switchToLogin()">Log in</a></li>
+					<li><a href="#properties" onclick="switchToProporties()">Proporties</a></li>
 					<li><a href="#myModal" rel="modal:open">About</a></li>
 				</nav>
-				<!-- <div id="name"  class="info">
-				</div> -->
 				<div id="score" class="info">
 					<label id="lblName"></label>
 					<label for="lblScore">LIFES:</label>
 					<input id="lblLifes" type="text" />
 					<label for="lblScore">SCORE:</label>
 					<input id="lblScore" type="text" />
+					<br/>
 					<label for="lblTime">TIME:</label>
 					<input id="lblTime" type="text"/>
 				</div>
-				<!-- <div id="time"  class="info">
-					
-				</div> -->
 				<div id="game" class="game">
 					<img id="pill" src="pictures/pill2.gif" alt="The Pill" style="display: none;">
-					<canvas id="canvas" height="600" width="600"></canvas>
+					<img id="clock" src="pictures/clock3.gif" alt="Clock" style="display: none;">
+					<img id="ghost1" src="pictures/ghost3.gif" alt="Ghost" style="display: none;">
+					<img id="ghost2" src="pictures/ghost2.gif" alt="Ghost" style="display: none;">
+					<img id="ghost3" src="pictures/ghost5.gif" alt="Ghost" style="display: none;">
+					<img id="ghost4" src="pictures/ghost4.gif" alt="Ghost" style="display: none;">
+					<img id="coin" src="pictures/coin.gif" alt="Coin" style="border-radius: 100%; display: none;">
+					<label id="lblFinalScore" style="padding-left: 40%;"></label>
+					<canvas id="canvas" height="600" width="900"></canvas>
+					<label for="ballsNum">Number of balls:</label>
+					<label for="5poi">5 points:</label>
+					<label for="15poi">15 points:</label>
+					<label for="25poi">25 points:</label>
+					<label for="monsterNum">Number of monsters:</label>
+					<br/>
+				</div>
+				<div id="restart">
+					<button id = "rbutton" class="button" onclick="restart()">Restart Game</button>
 					<br/>
 					<br/>
 				</div>
@@ -153,9 +170,17 @@
 			backMusic.pause();
 			myMusic.play();
 		};
-	</script>
-
-	<script type="text/javascript">
+</script>
+<script type="text/javascript">
+	function switchToProporties(){
+		$('div:not(#properties)').hide();
+		$("#allStuffForGame").hide();
+		$('#properties').show();
+		backMusic.pause();
+		myMusic.play();
+	};
+</script>
+<script type="text/javascript">
 		function switchToSignIn(){
 			$('div:not(#register)').hide();
 			$("#allStuffForGame").hide();
@@ -163,6 +188,15 @@
 			backMusic.pause();
 			myMusic.play();
 		};
+</script>
+<script type="text/javascript">
+		function restart(){
+			$("#lblFinalScore").hide();
+			$("#lblFinalScore").html('');
+			start_time = new Date();
+			clearIntervals();
+			Start();
+		}
 	</script>
 
 	<script type="text/javascript">
@@ -173,15 +207,6 @@
 			if(inputPassword === check){
 				$('#login').hide();
 				$('#properties').show();
-				// $('#game').show();
-				// $('#menu').show();
-				// $('#time').show();
-				// $('#score').show();
-				// $('#name').show();
-				// $('#name label').append(inputUserName);
-				// $('#allStuffForGame').show();
-				// backMusic.play();
-				// start_time = new Date();
 			}
 			else{
 				window.alert("Your Username or Password is invalid. (Maybe you didn't sign in?)");
@@ -333,31 +358,49 @@
 	</script>
 	<script type="text/javascript">
 
-		function go(){
-			if($("#timeLimit").valid()==true && ("#ball5").valid()==true && ("#ball15").valid()==true && ("#ball25").valid()==true){
+		function go1(){
+			if($("#timeLimit").valid()==true && $("#ball5").valid()==true && $("#ball15").valid()==true && $("#ball25").valid()==true){
 				var numOfBalls=document.getElementById("numOfBAlls").value;
 				var ball5Color=document.getElementById("ball5").value;
 				var ball15Color=document.getElementById("ball15").value;
 				var ball25Color=document.getElementById("ball25").value;
 				var time=document.getElementById("timeLimit").value;
 				var numOfMonsters=document.getElementById("numOfMonsters").value;
+				sessionStorage.setItem("time",time)
 				sessionStorage.setItem("numOfBalls",numOfBalls);
 				sessionStorage.setItem("ball5",ball5Color);
 				sessionStorage.setItem("ball15",ball15Color);
 				sessionStorage.setItem("ball25",ball25Color);
 				sessionStorage.setItem("numOfMonsters",numOfMonsters);
 				if(sessionStorage.getItem("up")==null){
-					sessionStorage.setItem("up","ARROWUP")
+					sessionStorage.setItem("up",38)
 				}
 				if(sessionStorage.getItem("down")==null){
-					sessionStorage.setItem("down","ARROWDOWN");
+					sessionStorage.setItem("down",40);
 				}
 				if(sessionStorage.getItem("right")==null){
-					sessionStorage.setItem("right","ARROWRIGHT");
+					sessionStorage.setItem("right",39);
 				}
 				if(sessionStorage.getItem("left")==null){
-					sessionStorage.setItem("left","ARROWLEFT");
+					sessionStorage.setItem("left",37);
 				}
+				var inputUserName = document.getElementById("uname").value;
+				event.preventDefault();
+				$('#properties').hide();
+				$('#game').show();
+				$('#menu').show();
+				$('#time').show();
+				$('#score').show();
+				$('#restart').show();
+				$('#name').show();
+				$('#lblName').append("Player: "+ inputUserName);
+				$('#allStuffForGame').show();
+				backMusic.play();
+				start_time = new Date();
+				$("#lblFinalScore").hide();
+				$("#lblFinalScore").html('');
+				clearIntervals();
+				Start();
 			}
 			else{
 				alert("please fill the proporties correctly");
@@ -366,10 +409,10 @@
 
 		function random1(){
 			event.preventDefault();
-			sessionStorage.setItem("up","ARROWUP");
-			sessionStorage.setItem("down","ARROWDOWN");
-			sessionStorage.setItem("right","ARROWRIGHT");
-			sessionStorage.setItem("left","ARROWLEFT");
+			sessionStorage.setItem("up",38);
+			sessionStorage.setItem("down",40);
+			sessionStorage.setItem("right",39);
+			sessionStorage.setItem("left",37);
 			document.getElementById("upButton");
 			var but=document.getElementById("upButton").style.color="red";
 			var but=document.getElementById("downButton").style.color="red";
@@ -390,36 +433,36 @@
 		function setUpKey(){
 			event.preventDefault();
 			var but=document.getElementById("upButton");
-			window.onkeyup = function(event) {
-			let key = event.key.toUpperCase();
-			if(key==sessionStorage.getItem("down") || key==sessionStorage.getItem("right") || key==sessionStorage.getItem("left")){
+			document.getElementById("upButton").addEventListener('keydown',(event)=> {
+			let key = event.keyCode;
+			if((key==sessionStorage.getItem("down") || key==sessionStorage.getItem("right") || key==sessionStorage.getItem("left"))){
 				window.alert("you already chose this key, please pick another");
 			}
-			else{
+			else {
 				sessionStorage.setItem("up",key);
 				but.style.color="red";
 			}
-		}
+		});
 		};
 		function setDownKey(){
 			event.preventDefault();
 			var but=document.getElementById("downButton");
-			window.onkeyup = function(event) {
-			let key = event.key.toUpperCase();
-			if(key==sessionStorage.getItem("up") || key==sessionStorage.getItem("right") || key==sessionStorage.getItem("left")){
+			document.getElementById("downButton").addEventListener('keydown',(event)=> {
+			let key = event.keyCode;
+			if((key==sessionStorage.getItem("up") || key==sessionStorage.getItem("right") || key==sessionStorage.getItem("left"))){
 				window.alert("you already chose this key, please pick another");
 			}
 			else{
 				sessionStorage.setItem("down",key);
 				but.style.color="red";
 			}
-		}
+		});
 		};
 		function setRightKey(){
 			event.preventDefault();
 			var but=document.getElementById("rightButton");
-			window.onkeyup = function(event) {
-			let key = event.key.toUpperCase();
+			document.getElementById("rightButton").addEventListener('keydown',(event)=> {
+			let key = event.keyCode;
 			if(key==sessionStorage.getItem("down") || key==sessionStorage.getItem("up") || key==sessionStorage.getItem("left")){
 				window.alert("you already chose this key, please pick another");
 			}
@@ -427,13 +470,13 @@
 				sessionStorage.setItem("right",key);
 				but.style.color="red";
 			}
-		}
+		});
 		};
 		function setLeftKey(){
 			event.preventDefault();
 			var but=document.getElementById("leftButton");
-			window.onkeyup = function(event) {
-			let key = event.key.toUpperCase();
+			document.getElementById("leftButton").addEventListener('keydown',(event)=> {
+			let key = event.keyCode;
 			if(key==sessionStorage.getItem("down") || key==sessionStorage.getItem("right") || key==sessionStorage.getItem("right")){
 				window.alert("you already chose this key, please pick another");
 			}
@@ -441,7 +484,7 @@
 				sessionStorage.setItem("left",key);
 				but.style.color="red";
 			}
-		}
+		});
 		};
 	</script>
 	<!-- <script>
