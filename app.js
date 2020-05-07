@@ -135,16 +135,20 @@ function findRandomEmptyCell(board) {
 }
 
 function GetKeyPressed() {
-	if (keysDown[38]) {
+	var up=sessionStorage.getItem("up");
+	var down=sessionStorage.getItem("down");
+	var right=sessionStorage.getItem("right");
+	var left=sessionStorage.getItem("left");
+	if (keysDown[up]) {
 		return 1;
 	}
-	if (keysDown[40]) {
+	if (keysDown[down]) {
 		return 2;
 	}
-	if (keysDown[37]) {
+	if (keysDown[left]) {
 		return 3;
 	}
-	if (keysDown[39]) {
+	if (keysDown[right]) {
 		return 4;
 	}
 }
@@ -164,7 +168,7 @@ function Draw() {
 			} else if (board[i][j] == 1) {
 				context.beginPath();
 				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
-				context.fillStyle = "blue"; //color
+				context.fillStyle = sessionStorage.getItem("ball5"); //color
 				context.fill();
 			} else if (board[i][j] == 4) {
 				var my_gradient = context.createLinearGradient(0, 0, 0, 170);
@@ -351,7 +355,7 @@ function UpdatePosition() {
 		pac_color = "green";
 	}
 	//var timeChosen = sessionStorage.getItem("time");
-	var timeChosen = 30;
+	var timeChosen = parseInt(sessionStorage.getItem("time"));
 	if(time_elapsed>=timeChosen){
 		clearIntervals();
 		showFinalResults();
