@@ -12,6 +12,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />	
 		<script>
 			// Check browser support
@@ -42,7 +43,7 @@
 				<p style="font-size: small;">This game was created by Dor Elkabetz & Marina Botvinnik</p>
 			  </div>
 			<div id="welcome" class="notGame">
-					<p>
+					<p style="padding-top: 60px;">
 						<img src="pictures\\logo2.png"  class="image1">
 						GAME ON!
 						<br/>
@@ -84,9 +85,9 @@
 					<input id="password" type="password" name="password" placeholder="Password" />
 					<input id="email" type="text" name="email" placeholder="E-mail" />
 					<p style="font-size: small;">choose your B-day:</p>
-					<select id="year"></select>
-					<select id="month"></select>
-					<select id="day"></select>
+					<select id="year" style="font-size: small;"></select>
+					<select id="month"style="font-size: small;"></select>
+					<select id="day" style="font-size: small;"></select>
 					<br/>
 					<br/>
 					<button class="button" id="submitButton" type="submit" onclick="signUp()">Sign Me Up!</button>
@@ -96,7 +97,7 @@
 			<div id="properties" class="notGame">
 				<br/>
 				<form action="" name="properties" id="form">
-					Proporties
+					Properties
 					<img src="crazyRed.gif" class="image3">
 					<br/>
 					<br/>
@@ -123,8 +124,9 @@
 					<li><a href="#welcome" onclick="backToWelcome()">Welcome</a></li>
 					<li><a href="#register" onclick="switchToSignIn()">Register</a></li>
 					<li><a href="#login" onclick="switchToLogin()">Log in</a></li>
-					<li><a href="#properties" onclick="switchToProporties()">Proporties</a></li>
+					<li><a href="#properties" onclick="switchToProporties()">Properties</a></li>
 					<li><a href="#myModal" rel="modal:open">About</a></li>
+					<li ><img src="pictures/logo2.png" width="60" height="40"/></li>
 				</nav>
 				<div id="score" class="info">
 					<label id="lblName"></label>
@@ -132,11 +134,10 @@
 					<input id="lblLifes" type="text" />
 					<label for="lblScore">SCORE:</label>
 					<input id="lblScore" type="text" />
-					<br/>
 					<label for="lblTime">TIME:</label>
 					<input id="lblTime" type="text"/>
 				</div>
-				<div id="game" class="game">
+				<div id="game" class="row">
 					<img id="pill" src="pictures/pill2.gif" alt="The Pill" style="display: none;">
 					<img id="clock" src="pictures/clock3.gif" alt="Clock" style="display: none;">
 					<img id="ghost1" src="pictures/ghost3.gif" alt="Ghost" style="display: none;">
@@ -145,21 +146,28 @@
 					<img id="ghost4" src="pictures/ghost4.gif" alt="Ghost" style="display: none;">
 					<img id="coin" src="pictures/coin.gif" alt="Coin" style="border-radius: 100%; display: none;">
 					<label id="lblFinalScore" style="padding-left: 40%;"></label>
+					<div class = "col-md-8">
 					<canvas id="canvas" height="600" width="900"></canvas>
-					<label for="ballsNum">Number of balls:</label>
-					<label for="5poi">5 points:</label>
-					<label for="15poi">15 points:</label>
-					<label for="25poi">25 points:</label>
-					<label for="monsterNum">Number of monsters:</label>
+					</div>
 					<br/>
+					<div id="ShowProperties" class = "col-md-3">
+						<label id="ballsNum"></label> <br/>
+						<label id="5poi"></label><br/>
+						<label id="15poi"></label><br/>
+						<label id="25poi"></label><br/>
+						<label id="timeLimit1"></label><br/>
+						<label id="monsterNum"></label><br/>
+					</div>
 				</div>
 				<div id="restart">
+					<br/>
 					<button id = "rbutton" class="button" onclick="restart()">Restart Game</button>
 					<br/>
 					<br/>
 				</div>
 			</section>
 		</content>
+		<footer style="margin-top: 0px; font-size: small; border:rgba(255, 255, 0, 0.521) 2px solid; background: rgb(0, 0, 0); " id="footer"> © Dor Elkabetz & Marina Botvinnik. For any questions contact: botvimar@post.bgu.ac.il</footer>
 	</body>
 
 	<script type="text/javascript">
@@ -169,35 +177,39 @@
 			$('#login').show();
 			backMusic.pause();
 			myMusic.play();
+			$("#lblFinalScore").hide();
+			$("#lblFinalScore").html('');
+			clearIntervals();
 		};
-</script>
-<script type="text/javascript">
-	function switchToProporties(){
+
+		function switchToProporties(){
+		$("#lblFinalScore").hide();
+		$("#lblFinalScore").html('');
 		$('div:not(#properties)').hide();
 		$("#allStuffForGame").hide();
 		$('#properties').show();
 		backMusic.pause();
 		myMusic.play();
+		clearIntervals();
+		
 	};
-</script>
-<script type="text/javascript">
-		function switchToSignIn(){
+
+	function switchToSignIn(){
 			$('div:not(#register)').hide();
 			$("#allStuffForGame").hide();
 			$('#register').show();
 			backMusic.pause();
 			myMusic.play();
 		};
-</script>
-<script type="text/javascript">
 		function restart(){
 			$("#lblFinalScore").hide();
 			$("#lblFinalScore").html('');
 			start_time = new Date();
 			clearIntervals();
 			Start();
-		}
-	</script>
+		};
+</script>
+
 
 	<script type="text/javascript">
 		function checkLogin(){
@@ -216,6 +228,8 @@
 
 	<script type="text/javascript">
 		function backToWelcome(){
+				$("#lblFinalScore").hide();
+				$("#lblFinalScore").html('');
 				$('div:not(#welcome)').hide();
 				$('#welcome').show();
 				backMusic.pause();
@@ -365,6 +379,7 @@
 				var ball15Color=document.getElementById("ball15").value;
 				var ball25Color=document.getElementById("ball25").value;
 				var time=document.getElementById("timeLimit").value;
+				console.log(time);
 				var numOfMonsters=document.getElementById("numOfMonsters").value;
 				sessionStorage.setItem("time",time)
 				sessionStorage.setItem("numOfBalls",numOfBalls);
@@ -393,8 +408,18 @@
 				$('#score').show();
 				$('#restart').show();
 				$('#name').show();
+				$("#lblName").html('');
+				$("#5poi").html(''); $("#15poi").html(''); $("#25poi").html(''); $("#monsterNum").html('');$("#timeLimit1").html('');
 				$('#lblName').append("Player: "+ inputUserName);
+				$('#ballsNum').append("Number of balls: "+ numOfBalls);
+				$('#5poi').append("5 points: "+ ball5Color);
+				$('#15poi').append("15 points: "+ ball15Color);
+				$('#25poi').append("25 points: "+ ball25Color);
+				$('#timeLimit1').append("Time Limit: "+ time);
+				$('#monsterNum').append("Number Of Monsters: "+ numOfMonsters);
 				$('#allStuffForGame').show();
+				$(".col-md-3").show();
+				$(".col-md-8").show();
 				backMusic.play();
 				start_time = new Date();
 				$("#lblFinalScore").hide();
@@ -429,7 +454,6 @@
 			$("#timeLimit").val(randomTime).trigger("change");
 			$("#numOfMonsters").val(document.getElementById("numOfMonsters").childNodes.item(randomNumberOfMons).textContent).trigger("change");
 		};
-
 		function setUpKey(){
 			event.preventDefault();
 			var but=document.getElementById("upButton");
@@ -487,18 +511,4 @@
 		});
 		};
 	</script>
-	<!-- <script>
-		var modal = document.getElementById("myModal");
-		var btn = document.getElementById("about");
-		var span = document.getElementsByClassName("close")[0];
-		$(btn).click(function(e){
-		e.preventDefault();
-		modal.style.display = "block";
-		});
-		window.onclick = function(event) {
-		  if (event.target == modal) {
-			modal.style.display = "none";
-		  }
-		}
-	</script> -->
 </html>
