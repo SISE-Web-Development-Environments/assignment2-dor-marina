@@ -23,7 +23,7 @@ function makeMonsters(){
 	}
 	else if(numberOfMonsters == 3){
 		board[14][9] = 7;
-		board[0][0] = 8;s
+		board[0][0] = 8;
 		board[0][9] = 9;
         board[14][0] = 20;
         ghost1Interval = setInterval(UpdateMonster1Position,600);

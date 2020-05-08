@@ -23,6 +23,7 @@ var pill;
 var pillTime;
 var prevCoinValue;
 var dead;
+var food_remain;
 
 $(document).ready(function() {
 	context = canvas.getContext("2d");
@@ -43,7 +44,10 @@ function Start() {
 	lifesRemain = 5;
 	pac_color = "yellow";
 	var cnt = 100;
-	var food_remain = 50;
+	food_remain = sessionStorage.getItem("numOfBalls");
+	var points5_remain=food_remain*0.6;
+	var points15_remain=food_remain*0.3;
+	var points25_remain=food_remain*0.1;
 	var pacman_remain = 1;
 	for (var i = 0; i < 15; i++) {
 		board[i] = new Array();
@@ -81,11 +85,44 @@ function Start() {
 			}
 			 else {
 				var randomNum = Math.random();
-				if (randomNum <= (1.0 * food_remain) / cnt) {
-					food_remain--;
-					board[i][j] = 1;
+				if (randomNum <= (1.0 * (points25_remain+points15_remain+points5_remain)) / cnt) {
+					var randomBall= Math.random();
+					if(points25_remain==0 && points15_remain==0 && points5_remain>0){
+						board[i][j] = 1;
+						points5_remain--;
+					} else if(points25_remain==0 && points5_remain==0 && points15_remain>0){
+						board[i][j] = 3;
+						points15_remain--;
+					} else if(points15_remain==0 && points5_remain==0 && points25_remain>0){
+						board[i][j] = 25;
+						points25_remain--;
+					}
+					else if(points5_remain==0){
+						board[i][j] = 3;
+						points15_remain--;
+					}
+					else if(points15_remain==0){
+						board[i][j] = 1;
+						points5_remain--;
+					}
+					else if(points25_remain==0){
+						board[i][j] = 1;
+						points5_remain--;
+					}
+					else if(randomBall<0.333 && points25_remain>0){
+						board[i][j] = 25;
+						points25_remain--;
+					}
+					else if(randomBall>0.666 && points25_remain>0){
+						board[i][j] = 3;
+						points15_remain--;
+					}
+					else{
+						board[i][j] = 1;
+						points5_remain--;
+					}
 				} else 
-				if (randomNum < (1.0 * (pacman_remain + food_remain)) / cnt) {
+				if (randomNum < (1.0 * (pacman_remain + (points25_remain+points15_remain+points5_remain))) / cnt) {
 					shape.i = i;
 					shape.j = j;
 					pacman_remain--;
@@ -98,10 +135,20 @@ function Start() {
 		}
 	}
 	makeMonsters();
-	while (food_remain > 0) {
+	while ((points25_remain+points15_remain+points5_remain) > 0) {
 		var emptyCell = findRandomEmptyCell(board);
-		board[emptyCell[0]][emptyCell[1]] = 1;
-		food_remain--;
+		if(points5_remain>0){
+			board[emptyCell[0]][emptyCell[1]] = 1;
+			points5_remain--;
+		}
+		if(points15_remain>0){
+			board[emptyCell[0]][emptyCell[1]] = 3;
+			points15_remain--;
+		}
+		else{
+			board[emptyCell[0]][emptyCell[1]] = 25;
+			points25_remain--;
+		}
 	}
 	keysDown = {};
 	addEventListener(
@@ -169,6 +216,16 @@ function Draw() {
 				context.beginPath();
 				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
 				context.fillStyle = sessionStorage.getItem("ball5"); //color
+				context.fill();
+			} else if (board[i][j] == 3) {
+				context.beginPath();
+				context.arc(center.x, center.y, 20, 0, 2 * Math.PI); // circle
+				context.fillStyle = sessionStorage.getItem("ball15"); //color
+				context.fill();
+			} else if (board[i][j] == 25) {
+				context.beginPath();
+				context.arc(center.x, center.y, 25, 0, 2 * Math.PI); // circle
+				context.fillStyle = sessionStorage.getItem("ball25"); //color
 				context.fill();
 			} else if (board[i][j] == 4) {
 				var my_gradient = context.createLinearGradient(0, 0, 0, 170);
@@ -297,8 +354,19 @@ function UpdatePosition() {
 		}
 	}
 	if (board[shape.i][shape.j] == 1) {
-		score++;
+		score+=5;
 		musicEat.play();
+		food_remain--;
+	}
+	if (board[shape.i][shape.j] == 3) {
+		score+=15;
+		musicEat.play();
+		food_remain--;
+	}
+	if (board[shape.i][shape.j] == 25) {
+		score+=25;
+		musicEat.play();
+		food_remain--;
 	}
 	var currTime = new Date();
 	if(pillTime!=null && (currTime - pillTime) / 1000 >=5){
@@ -366,7 +434,7 @@ function UpdatePosition() {
 			setTimeout(function(){ 	window.alert("Winner!!!");}, 500);
 		}
 	}
-	if (score == 50) {
+	if (food_remain==0) {
 		clearIntervals();
 		window.alert("Game completed");
 		backMusic.pause();
