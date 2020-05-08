@@ -18,11 +18,11 @@
  * After you login correcly, you will see the properties of the game:
   1. you can choose your properties
   2. you can click "random" and the game will fill properties for you.
-  **NOTICE: After you chose the properties, you can't change them in the middle of the game!**
+  3.**NOTICE: After you chose the properties, you can't change them in the middle of the game!**
   * Game rulls:
    1. If a ghost gets you  - you loose a life
    2. If you loose all 5 lifes - you loose the game
    3. If the time you chose passed and you got less then 100 points - you will get a propper message.
-   4. If the time you chose passed and you got more than 99 points - you win the game!!!
-  *You can always restart the game using restart button, or click properties in the toolbar.
+   4. If the time you chose passed and you got more than 99 points - **you win the game!!!
+   5.You can always restart the game using restart button, or click properties in the toolbar.
   
