@@ -49,6 +49,7 @@ function Start() {
 	var points15_remain=food_remain*0.3;
 	var points25_remain=food_remain*0.1;
 	var pacman_remain = 1;
+
 	for (var i = 0; i < 15; i++) {
 		board[i] = new Array();
 		//put obstacles in (i=3,j=3) and (i=3,j=4) and (i=3,j=5), (i=6,j=1) and (i=6,j=2)
@@ -83,57 +84,17 @@ function Start() {
 			else if(i==0 && j==0){// coin
 				board[i][j]=20;
 			}
-			 else {
-				var randomNum = Math.random();
-				if (randomNum <= (1.0 * (points25_remain+points15_remain+points5_remain)) / cnt) {
-					var randomBall= Math.random();
-					if(points25_remain==0 && points15_remain==0 && points5_remain>0){
-						board[i][j] = 1;
-						points5_remain--;
-					} else if(points25_remain==0 && points5_remain==0 && points15_remain>0){
-						board[i][j] = 3;
-						points15_remain--;
-					} else if(points15_remain==0 && points5_remain==0 && points25_remain>0){
-						board[i][j] = 25;
-						points25_remain--;
-					}
-					else if(points5_remain==0){
-						board[i][j] = 3;
-						points15_remain--;
-					}
-					else if(points15_remain==0){
-						board[i][j] = 1;
-						points5_remain--;
-					}
-					else if(points25_remain==0){
-						board[i][j] = 1;
-						points5_remain--;
-					}
-					else if(randomBall<0.333 && points25_remain>0){
-						board[i][j] = 25;
-						points25_remain--;
-					}
-					else if(randomBall>0.666 && points25_remain>0){
-						board[i][j] = 3;
-						points15_remain--;
-					}
-					else{
-						board[i][j] = 1;
-						points5_remain--;
-					}
-				} else 
-				if (randomNum < (1.0 * (pacman_remain + (points25_remain+points15_remain+points5_remain))) / cnt) {
-					shape.i = i;
-					shape.j = j;
-					pacman_remain--;
-					board[i][j] = 2;
-				} else {
-					board[i][j] = 0;
-				}
-				cnt--;
+			else {
+				board[i][j] = 0;
 			}
 		}
 	}
+
+	let cellForPacman = findRandomEmptyCell(board);
+	shape.i = cellForPacman[0];
+	shape.j = cellForPacman[1];
+	board[cellForPacman[0]][cellForPacman[1]] = 2;
+	pacman_remain--;	
 	makeMonsters();
 	while ((points25_remain+points15_remain+points5_remain) > 0) {
 		var emptyCell = findRandomEmptyCell(board);
@@ -141,7 +102,7 @@ function Start() {
 			board[emptyCell[0]][emptyCell[1]] = 1;
 			points5_remain--;
 		}
-		if(points15_remain>0){
+		else if(points15_remain>0){
 			board[emptyCell[0]][emptyCell[1]] = 3;
 			points15_remain--;
 		}
@@ -171,12 +132,11 @@ function Start() {
 }
 
 function findRandomEmptyCell(board) {
-	var i = Math.floor(Math.random() * 14 + 1);
-	console.log(i);
-	var j = Math.floor(Math.random() * 9 + 1);
+	var i = Math.floor(Math.random() * 14);
+	var j = Math.floor(Math.random() * 10);
 	while (board[i][j] != 0) {
-		i = Math.floor(Math.random() * 14 + 1);
-		j = Math.floor(Math.random() * 9 + 1);
+		i = Math.floor(Math.random() * 14);
+		j = Math.floor(Math.random() * 10);
 	}
 	return [i, j];
 }
