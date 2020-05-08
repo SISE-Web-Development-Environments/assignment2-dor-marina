@@ -357,6 +357,8 @@ function UpdatePosition() {
 	//var timeChosen = sessionStorage.getItem("time");
 	var timeChosen = parseInt(sessionStorage.getItem("time"));
 	if(time_elapsed>=timeChosen){
+		backMusic.pause();
+		backMusic.currentTime = 0;
 		clearIntervals();
 		showFinalResults();
 		if(score<100){

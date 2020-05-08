@@ -210,7 +210,10 @@
 			$("#lblFinalScore").html('');
 			start_time = new Date();
 			clearIntervals();
+			backMusic.currentTime = 0;
+			backMusic.pause();
 			Start();
+			backMusic.play();
 		};
 </script>
 

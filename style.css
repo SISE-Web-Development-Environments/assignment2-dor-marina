@@ -31,8 +31,8 @@ html, body{
   }
 
 #welcome{
-    font-family: "pacmanFont";
-    font-size: 120px;
+    font-family: "Press Start 2p";
+    font-size: 100px;
 }
 
 #login, #register, #properties{
