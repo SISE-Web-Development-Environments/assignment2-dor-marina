@@ -8,28 +8,27 @@ var prevValueGhost3=0;
 var prevValueGhost4=0;
 
 function makeMonsters(){
-	// var numOfMonsters = sessionStorage.getItem("Monsters");
-	var numOfMonsters = 2;
-	if(numOfMonsters == 1){
+	var numberOfMonsters = sessionStorage.getItem("numOfMonsters");
+	if(numberOfMonsters == 1){
 		board[14][9] = 7;
         board[0][0] = 20;
-        ghost1Interval = setInterval(UpdateMonster1Position,500);
+        ghost1Interval = setInterval(UpdateMonster1Position,600);
 	}
-	else if(numOfMonsters == 2){
+	else if(numberOfMonsters == 2){
 		board[14][9] = 7;
 		board[0][0] = 8;
         board[14][0] = 20;
-        ghost1Interval = setInterval(UpdateMonster1Position,500);
-        ghost2Interval = setInterval(UpdateMonster2Position,500);
+        ghost1Interval = setInterval(UpdateMonster1Position,600);
+        ghost2Interval = setInterval(UpdateMonster2Position,600);
 	}
-	else if(numOfMonsters == 3){
+	else if(numberOfMonsters == 3){
 		board[14][9] = 7;
 		board[0][0] = 8;s
 		board[0][9] = 9;
         board[14][0] = 20;
-        ghost1Interval = setInterval(UpdateMonster1Position,500);
-        ghost2Interval = setInterval(UpdateMonster2Position,500);
-        ghost3Interval = setInterval(UpdateMonster3Position,500);
+        ghost1Interval = setInterval(UpdateMonster1Position,600);
+        ghost2Interval = setInterval(UpdateMonster2Position,600);
+        ghost3Interval = setInterval(UpdateMonster3Position,600);
     }
 	else{
 		board[14][9] = 7;
@@ -37,10 +36,10 @@ function makeMonsters(){
 		board[0][9] = 9;
 		board[14][0] = 10;
         board[7][0] = 20;
-        ghost1Interval = setInterval(UpdateMonster1Position,500);
-        ghost2Interval = setInterval(UpdateMonster2Position,500);
-        ghost3Interval = setInterval(UpdateMonster3Position,500);
-        ghost4Interval = setInterval(UpdateMonster4Position,500);
+        ghost1Interval = setInterval(UpdateMonster1Position,600);
+        ghost2Interval = setInterval(UpdateMonster2Position,600);
+        ghost3Interval = setInterval(UpdateMonster3Position,600);
+        ghost4Interval = setInterval(UpdateMonster4Position,600);
 	}
 }
 //------------monster1--------------
