@@ -15,14 +15,14 @@
 * In the welcome screen you have 2 options:
  1. Login - click it if you already Signed up for the game.
  2. Sign Up - click it if you are a new user - fill your info and than go back to the welcome screen to login.
- * After you login correcly, you will see the properties of the game:
-  1. you can choose your properties
-  2. you can click "random" and the game will fill properties for you.
-  3.**NOTICE: After you chose the properties, you can't change them in the middle of the game!**
-  * Game rulls:
-   1. If a ghost gets you  - you loose a life
-   2. If you loose all 5 lifes - you loose the game
-   3. If the time you chose passed and you got less then 100 points - you will get a propper message.
-   4. If the time you chose passed and you got more than 99 points - **you win the game!!!
-   5.You can always restart the game using restart button, or click properties in the toolbar.
+* After you login correcly, you will see the properties of the game:
+ 1. you can choose your properties
+ 2. you can click "random" and the game will fill properties for you\n
+ 3. NOTICE: After you chose the properties, you can't change them in the middle of the game!
+ * Game rulls:
+  1. If a ghost gets you  - you loose a life
+  2. If you loose all 5 lifes - you loose the game
+  3. If the time you chose passed and you got less then 100 points - you will get a propper message.\n
+  4. If the time you chose passed and you got more than 99 points - you win the game!!!
+  5. You can always restart the game using restart button, or click properties in the toolbar.
   
